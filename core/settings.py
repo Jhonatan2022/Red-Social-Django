@@ -17,7 +17,7 @@ from pathlib import Path
 import os
 
 # Importamos environ para poder acceder a las variables de entorno
-import environ  
+import environ
 #-----------------------------IMPORTAMOS LAS LIBRERIAS-------------------------#
 
 
@@ -27,7 +27,7 @@ env = environ.Env()
 # Leemos el archivo .env
 environ.Env.read_env()
 
-
+ENVIRONMENT = env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +44,9 @@ DEBUG = 'RENDER' not in os.environ # Si no estamos en render, debug es True
 
 ALLOWED_HOSTS = []
 
+# Ponemos la direccion de npm para que pueda ejecutar tailwind
+NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+
 
 # Application definition
 
@@ -55,12 +58,29 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Importamos tailwind para poder usarlo en el proyecto
+    'tailwind',
+
+    # Importamos la app que creamos con tailwind
+    'theme',
+
     # Importamos la app principal
     'core',
 
     # Importamos la nueva app
     'social',
 ]
+
+# Configuramos tailwind
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+   "127.0.0.1",
+]
+
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,7 +139,7 @@ DATABASES = {
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 
-# Password validation nos permite validar la contraseña
+# Password validation nos permite encriptar las contraseñas de los usuarios
 PASSWORD_HASHERS = [
     # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -148,26 +168,98 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
+# idioma de la pagina web en-us (ingles) es (español) pt (portugues) fr (frances)
+LANGUAGE_CODE = 'en-us' 
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+# UTC-5 (hora de venezuela) UTC-4 (hora de colombia) UTC-3 (hora de argentina)
+TIME_ZONE = 'UTC' 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
+
+
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# Indicamos la ruta de los archivos estaticos (css, js, img)
 STATIC_URL = '/static/'
+
+# Manejamos los archivos estaticos localmente
+STATICFILES_DIRS = [
+
+    # Indicamos la ruta de los archivos estaticos
+    os.path.join(BASE_DIR, 'static')
+]
+# Pasamos todos los archivos a static_root cuando se suba a produccion
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+# Indicamos la ruta de los archivos media
+MEDIA_URL = '/media/'
+# Indicamos la ruta de los archivos media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Verificamos si la aplicacion esta en modo debug o no debug para enviar correos
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+
+#--------------------CONFIGURAMOS EL DESPLIEGUE DE AMAZON----------------------#
+
+if not DEBUG:
+
+    # Verificamos si la aplicacion esta en modo debug o no debug para enviar correos
+    EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+
+    # Configuramos el envio de correos
+    EMAIL_HOST = env('EMAIL_HOST')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = env('EMAIL_PORT')
+    EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+
+
+    # Cambiamos la configuracion de seguridad de la aplicacion
+    SESSION_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_REDIRECT_EXEMPT = []
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # django-ckeditor will not work with S3 through django-storages without this line in settings.py
+    AWS_QUERYSTRING_AUTH = False
+
+    # aws settings
+
+    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+
+
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_DEFAULT_ACL = 'public-read'
+
+    # s3 static settings
+
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    # s3 public media settings
+
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'core.storage_backends.MediaStore'
+
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
