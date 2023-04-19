@@ -128,14 +128,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
     }
 } """
 
-# Configuramos la base de datos postgresql
+# # Configuramos la base de datos postgresql
+# DATABASES = {
+
+#     # Configuramos la base de datos de render
+#     "default": env.db("DATABASE_URL", default="postgres:///social"),
+# }
+
+# # Configuramos la base de datos de render
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
 DATABASES = {
-
-    # Configuramos la base de datos de render
-    "default": env.db("DATABASE_URL", default="postgres:///redsocial"),
+    "default": env.db("DATABASE_URL", default="postgres:///social"),
 }
-
-# Configuramos la base de datos de render
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 
