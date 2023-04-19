@@ -112,11 +112,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
 
     # Configuramos la base de datos de render
-    "default": env.db("DATABASE_URL", default="postgres:///core"),
+    "default": env.db("DATABASE_URL", default="postgres:///redsocial"),
 }
 
 # Configuramos la base de datos de render
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+
+# Password validation nos permite validar la contraseña
+PASSWORD_HASHERS = [
+    # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+]
 
 
 # Password validation
