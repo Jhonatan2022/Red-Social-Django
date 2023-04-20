@@ -33,6 +33,7 @@ ENVIRONMENT = env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -42,7 +43,26 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ # Si no estamos en render, debug es True
 
-ALLOWED_HOSTS = []
+
+
+ALLOWED_HOSTS = [
+
+    # Indicamos que cualquier host puede acceder a la app
+    '*', # El asterisco indica que cualquier url puede acceder a la app
+]
+
+
+
+# Agregamos una configuración de external host para que render funcione
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+# Si estamos en render, agregamos el hostname a los allowed hosts
+if RENDER_EXTERNAL_HOSTNAME:
+
+    # Agregamos el hostname a los allowed hosts
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+
 
 # Ponemos la direccion de npm para que pueda ejecutar tailwind
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
