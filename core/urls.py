@@ -19,6 +19,9 @@ from django.contrib import admin
 
 # Importamos path para crear las rutas
 from django.urls import path
+
+# Importamos la vista de la pagina principal que creamos en views.py
+from .views import HomeView
 #-----------------------------IMPORTAMOS LAS LIBRERIAS-------------------------#
 
 
@@ -29,4 +32,8 @@ urlpatterns = [
 
     # Ruta para acceder al panel de administración
     path('admin/', admin.site.urls),
+
+    # Ruta para acceder a la pagina principal
+    # Al ser una vista de clase, colocamos as_view() para que se ejecute el metodo get
+    path('', HomeView.as_view(), name='home'),
 ]

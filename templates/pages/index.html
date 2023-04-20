@@ -2,15 +2,15 @@
 {% load static %}
 <!-------------------------------------------------------------------------->
 {% block navbar %}
-{% include 'components/navbar.html' %}
+{% comment %} {% include 'components/navbar.html' %} {% endcomment %}
 {% endblock navbar %}
 <!-------------------------------------------------------------------------->
 {% block left_sidebar %}
-{% include 'components/sidebars/left/sidebar.html' %}
+{% comment %} {% include 'components/sidebars/left/sidebar.html' %} {% endcomment %}
 {% endblock left_sidebar %}
 <!-------------------------------------------------------------------------->
 {% block content %}
-<p class="text-rose-200">test</p>
+<p class="text-red-700 text-4xl font-bold">Hola a todos</p>
 {% endblock content %}
 <!-------------------------------------------------------------------------->
 {% block right_sidebar %}
