@@ -20,6 +20,12 @@ from django.contrib import admin
 # Importamos path para crear las rutas
 from django.urls import path
 
+# Importamos settings para poder acceder a las variables de configuración
+from django.conf import settings
+
+# Importamos static para poder acceder a las variables de configuración
+from django.conf.urls.static import static
+
 # Importamos la vista de la pagina principal que creamos en views.py
 from .views import HomeView
 #-----------------------------IMPORTAMOS LAS LIBRERIAS-------------------------#
@@ -37,3 +43,10 @@ urlpatterns = [
     # Al ser una vista de clase, colocamos as_view() para que se ejecute el metodo get
     path('', HomeView.as_view(), name='home'),
 ]
+#----------------------------RUTAS DE LA APLICACIÓN-----------------------------#
+
+
+if settings.DEBUG:
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
