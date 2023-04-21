@@ -59,7 +59,7 @@ module.exports = {
         extend: {
 
             // Podemos agregar los colores que queramos al modo oscuro
-            'dark-main': '#18191A',
+            'dark-main': '#020303',
             'dark-second': '#242526',
             'dark-third': '#3A3B3C',
             'dark-txt': '#B8BBBF',

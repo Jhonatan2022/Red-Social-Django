@@ -37,6 +37,7 @@ python manage.py runserver
 # Conectamos tailwind con django
 python manage.py tailwind init
 
+
 # comando para generar archivo con las dependencias
 pip freeze > requirements.txt
 # or pip freeze > requirements.sh
