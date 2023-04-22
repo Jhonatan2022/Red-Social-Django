@@ -78,11 +78,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Agregamos sites para 
+    'django.contrib.sites',
+
+    # Integramos humanize para que pueda verse de 16/02/2021 a 56 minutos atrás
+    'django.contrib.humanize',
+
     # Importamos tailwind para poder usarlo en el proyecto
     'tailwind',
 
     # Importamos la app que creamos con tailwind
     'theme',
+
+    # Importamos algunos componentes de allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     # Importamos la app principal
     'core',
@@ -90,6 +101,11 @@ INSTALLED_APPS = [
     # Importamos la nueva app
     'social',
 ]
+
+# Configuramos el sitio con site_id = 1 para que funcione allauth
+SITE_ID = 1
+
+
 
 # Configuramos tailwind
 TAILWIND_APP_NAME = 'theme'
@@ -99,6 +115,15 @@ INTERNAL_IPS = [
 ]
 
 
+# Agregamos funciones para que se ejecute con exito la autenticación de usuarios
+AUTHENTICATION_BACKENDS = [
+
+    # Agregamos la autenticación de usuarios por defecto de django
+    "django.contrib.auth.backends.ModelBackend",
+
+    # Agregamos la autenticación de usuarios con allauth
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 
 
