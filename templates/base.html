@@ -46,8 +46,9 @@
 
         <!--main content-->
         <div class="w-full lg:w-2/3 xl:w-2/5 pt-32 lg:pt-16 px-2">
+        {% include 'messages.html' %}
         {% block content %}{% endblock content %}
-        </div>
+        </div>  
 
         <div class="w-1/5 pt-16 h-full hidden xl:block px-4 fixed top-0 right-0">
         {% block right_sidebar %}{% endblock right_sidebar %}
