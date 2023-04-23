@@ -17,8 +17,8 @@ Including another URLconf
 # Importamos admin para poder acceder al panel de administración
 from django.contrib import admin
 
-# Importamos path para crear las rutas
-from django.urls import path
+# Importamos path para crear las rutas, include para incluir otras rutas
+from django.urls import path, include
 
 # Importamos settings para poder acceder a las variables de configuración
 from django.conf import settings
@@ -38,6 +38,9 @@ urlpatterns = [
 
     # Ruta para acceder al panel de administración
     path('admin/', admin.site.urls),
+
+    # Coloca la ruta de la aplicación que creaste en la carpeta apps
+    path('accounts/', include('allauth.urls')),
 
     # Ruta para acceder a la pagina principal
     # Al ser una vista de clase, colocamos as_view() para que se ejecute el metodo get
