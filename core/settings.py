@@ -95,6 +95,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    # Importamos crispy para el diseño y manejo de los formularios
+    'crispy_forms',
+    "crispy_tailwind",
+
     # Importamos la app principal
     'core',
 
@@ -110,9 +114,19 @@ SITE_ID = 1
 # Configuramos tailwind
 TAILWIND_APP_NAME = 'theme'
 
+
+# Configuramos el path de tailwind para que funcione con render
 INTERNAL_IPS = [
    "127.0.0.1",
 ]
+
+
+# Configuramos crispy
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+# Configuramos crispy para que funcione con tailwind
+CRISPY_TEMPLATE_PACK = "tailwind"
+
 
 
 # Agregamos funciones para que se ejecute con exito la autenticación de usuarios
@@ -124,6 +138,44 @@ AUTHENTICATION_BACKENDS = [
     # Agregamos la autenticación de usuarios con allauth
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
+
+
+# Configuramos el login y logout de allauth para que funcione con tailwind
+
+# Configuramos el login
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+
+# DETERMINAMOS EL TIPO DE AUTENTICACIÓN DE USUARIOS
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# DETERMINAMOS SI EL USUARIO DEBE INGRESAR SU EMAIL PARA INICIAR SESIÓN
+ACCOUNT_EMAIL_REQUIRED = True
+
+# DETERMINAMOS SI EL EMAIL DEBE SER ÚNICO
+ACCOUNT_EMAIL_UNIQUE = True
+
+
+# AUTH_USER_MODEL = "accounts.User"
+
+# DETERMINAMOS EL CERRADO DE SESIÓN
+ACCOUNT_LOGOUT_ON_GET = True
+
+# MANDAMOS UN EMAIL DE VERIFICACIÓN CUANDO EL USUARIO SE REGISTRA O CAMBIA SU EMAIL
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+# DETERMINAMOS LA CANTIDAD DE INTENTOS DE INGRESO AL SISTEMA
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
+
+# DETERMINAMOS EL TIEMPO DE ESPERA PARA PODER INTENTAR INGRESAR AL SISTEMA
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
+
+# CUANDO EL USUARIO INICIA SESIÓN LO REDIRIGIMOS A LA PÁGINA DE PERFIL
+LOGIN_REDIRECT_URL = "/"
+
+# TOMAMOS EL VALOR DE LA VARIABLE DE ENTORNO PARA EL EMAIL DE VERIFICACIÓN
+LOGIN_URL = "account_login"
+
 
 
 
