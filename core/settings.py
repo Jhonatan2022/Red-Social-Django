@@ -102,6 +102,9 @@ INSTALLED_APPS = [
     # Importamos la app principal
     'core',
 
+    # Importamos la app de accounts
+    'accounts',
+
     # Importamos la nueva app
     'social',
 ]
@@ -155,8 +158,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 # DETERMINAMOS SI EL EMAIL DEBE SER ÚNICO
 ACCOUNT_EMAIL_UNIQUE = True
 
-
-# AUTH_USER_MODEL = "accounts.User"
+# Especificamos el modelo de usuario que usaremos
+AUTH_USER_MODEL = "accounts.User"
 
 # DETERMINAMOS EL CERRADO DE SESIÓN
 ACCOUNT_LOGOUT_ON_GET = True
