@@ -32,6 +32,62 @@ def user_directory_path_profile(instance, filname):
     # El 0 hace referencia al nombre de usuario
     profile_picture_name = 'user/{0}/profile.jpg'.format(instance.user.username)
 
+    # Definimos la ruta donde se guardará la imagen de perfil
+    full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_name)
+
+
+    # Si existe una imagen de perfil la borramos para que no se acumulen
+    if os.path.exists(full_path):
+
+        # Borramos la imagen de perfil del usuario
+        os.remove(full_path)
+
+    # Devolvemos la ruta donde se guardará la imagen
+    return profile_picture_name
+
+
+
+
+# Creamos una variable global para las opciones de verificar el tipo de usuario
+# Las opciones son una tupla de tuplas
+# La primera posición de la tupla es el valor que se guardará en la base de datos
+# La segunda posición de la tupla es el valor que se mostrará en el formulario
+VERIFICATION_OPTIONS = (
+
+    # La primera opción es la de no verificado
+    # La ingresamos dos veces para que este bien definida la tupla
+    ('unverified', 'unverified'),
+
+    # Como segunda opción tendremos la de verificado
+    ('verified', 'verified'),
+)
+
+
+
+
+
+# Creamos una función para cuando el usuario quiera subir una imagen de banner
+# La intancia hace referencia al modelo Profile (Usuario) y el filename al nombre del archivo
+def user_directory_path_banner(instance, filname):
+
+    # Cremos un apartado para que se cree una carpeta con el nombre del usuario y dentro se guarde la imagen
+    # El 0 hace referencia al nombre de usuario
+    profile_picture_name = 'user/{0}/banner.jpg'.format(instance.user.username)
+
+    # Definimos la ruta donde se guardará la imagen de perfil
+    full_path = os.path.join(settings.MEDIA_ROOT, profile_picture_name)
+
+
+    # Si existe una imagen de perfil la borramos para que no se acumulen
+    if os.path.exists(full_path):
+
+        # Borramos la imagen de perfil del usuario
+        os.remove(full_path)
+
+    # Devolvemos la ruta donde se guardará la imagen
+    return profile_picture_name
+
+
 
 
 # Creamos una clase que hereda de AbstractUser para poder extender el modelo de usuario
@@ -41,6 +97,7 @@ class User(AbstractUser):
     # blank=True para que no sea obligatorio, null=True para que pueda ser nulo en la base de datos
     stripe_customer_id = models.CharField(max_length=50) 
     
+
 
 
 # Creamos una clase que hereda de models.Model para poder crear un modelo de perfil de usuario
@@ -53,4 +110,7 @@ class Profile(models.Model):
     # Creamos un campo de imagen para poder añadir una imagen de perfil
     # upload_to para indicar la ruta donde se guardará la imagen
     # default para indicar una imagen por defecto
-    picture = models.ImageField(upload_to='profile', default='media/users/default.jpg')
+    picture = models.ImageField(upload_to='profile', default='media/users/default_profile.jpg', upload_to=user_directory_path_profile)
+
+    # Creamos un campo para el banner del perfil del usuario (imagen de portada)
+    banner = models.ImageField(upload_to='banners', default='media/users/default_banner.jpg', upload_to=user_directory_path_banner)
