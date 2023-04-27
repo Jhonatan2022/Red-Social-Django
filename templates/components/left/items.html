@@ -3,8 +3,8 @@
 <ul class="p-4">
     <li>
         <a href="#" class="flex items-center space-x-4 p-2 hover:bg-red-300 rounded-lg transition-all dark:text-dark-txt dark:hover:bg-dark-third">
-            <img src="static/img/marin.jpg" alt="Profile picture" class="w-12 h-12  rounded-full">
-            <span class="font-semibold">Space marin 002</span>
+            <img src="{{ user.profile.picture.url }}" alt="Profile picture" class="w-12 h-12  rounded-full">
+            <span class="font-semibold">{{ user.username }} </span>
         </a>
     </li>
     <li>
