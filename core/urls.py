@@ -42,6 +42,10 @@ urlpatterns = [
     # Coloca la ruta de la aplicación que creaste en la carpeta apps
     path('accounts/', include('allauth.urls')),
 
+    # Colocamos la ruta de users creada en accounts
+    # namespace: Es el nombre de la aplicación que creamos en accounts
+    path('users/', include('accounts.urls', namespace='users')),
+
     # Ruta para acceder a la pagina principal
     # Al ser una vista de clase, colocamos as_view() para que se ejecute el metodo get
     path('', HomeView.as_view(), name='home'),
