@@ -22,7 +22,6 @@
 {% csrf_token %}
     <button type="submit" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">{% trans 'Confirm' %}</button>
 </form>
-
 {% else %}
 
 {% url 'account_email' as email_url %}
@@ -30,5 +29,4 @@
 <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
 
 {% endif %}
-
 {% endblock %}
