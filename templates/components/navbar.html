@@ -21,7 +21,6 @@
                 
                 <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
             </a>
-        
             {% else %}
 
             <a href="#" class="inline-flex md:hidden items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
@@ -79,7 +78,6 @@
             </button>
         </li>
     
-
         <!--LEFT Mobile Sidebar-->
         <div @keydown.window.escape="open = false" x-show="open" aria-labelledby="slide-over-title" x-ref="dialog" aria-modal="true" 
                 class="fixed z-10 inset-0 overflow-auto xl:hidden ">
@@ -113,18 +111,14 @@
                                 <!--Menu Items-->
                                 {% include 'components/left/items.html' %}
                                
-
-                                {% include 'components/footer.html' %}
-                                
+                                {% include 'components/footer.html' %}  
                                 <!-- /End replace -->
                             </div>
                         </div>
                     </div>
-                
                 </div>
             </div>
         </div>
-
     </ul>
     <!-- END MAIN NAV -->
 
@@ -140,7 +134,6 @@
                 
                 <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
             </a>
-        
         {% else %}
 
         <li class="h-full xl:flex">
@@ -174,10 +167,8 @@
                     </div>
                 </div>
             </div>
-
         </li>
         {% endif %}
     </ul>
     <!-- END RIGHT NAV -->
-
 </nav>
