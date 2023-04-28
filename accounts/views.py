@@ -89,39 +89,38 @@ def EditProfile(request):
 
             # Hacemos referencia a user__info para poder editar los campos del usuario
             # Cleaned_data: Es un diccionario que contiene los datos validos del formulario
-            user__info.first_name = form.cleaned_data.get['first_name']
-            user__info.last_name = form.cleaned_data.get['last_name']
+            user__info.first_name = form.cleaned_data.get('first_name')
+            user__info.last_name = form.cleaned_data.get('last_name')
 
 
             # Pasaremos a editar el perfil del usuario
             # hacemos referencia a la imagen de perfil del usuario
-            profile.picture = form.cleaned_data.get['picture']
+            profile.picture = form.cleaned_data.get('picture')
 
             # hacemos referencia a la imagen de banner del usuario
-            profile.banner = form.cleaned_data.get['banner']
+            profile.banner = form.cleaned_data.get('banner')
 
             # hacemos referencia a la ubicacion del usuario
-            profile.location = form.cleaned_data.get['location']
+            profile.location = form.cleaned_data.get('location')
 
             # hacemos referencia a la sitio web del usuario
-            profile.website = form.cleaned_data.get['website']
+            profile.website = form.cleaned_data.get('website')
 
             # hacemos referencia a la fecha de nacimiento del usuario
-            profile.birthday = form.cleaned_data.get['birthday']
+            profile.birthday = form.cleaned_data.get('birthday')
 
             # hacemos referencia a la biografia del usuario
-            profile.biography = form.cleaned_data.get['biography'] 
+            profile.biography = form.cleaned_data.get('biography') 
 
+            # Guardamos los cambios del perfil
+            profile.save()
 
             # Guardamos los cambios
             # Guardamos los cambios del usuario
             user__info.save()
 
-            # Guardamos los cambios del perfil
-            profile.save()
-
             # Redireccionamos al perfil del usuario
-            return redirect('users:detail', request.user.username)
+            return redirect('users:profile', request.user.username)
         
     # Si el metodo es GET
     else:
@@ -134,7 +133,7 @@ def EditProfile(request):
     context = {
 
         # Obtenemos el formulario para editar el perfil
-        'form':form
+        'form':form,
     }
 
     # Retornamos y renderizamos el formulario para editar el perfil
