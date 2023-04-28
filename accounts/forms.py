@@ -5,14 +5,14 @@ from accounts.models import Profile
 # Importamos forms para poder crear un formulario
 from django import forms
 
-# Importamos get_user_model para poder obtener el modelo de usuario
-from django.contrib.auth import get_user_model
+# # Importamos get_user_model para poder obtener el modelo de usuario
+# from django.contrib.auth import get_user_model
 # -------------------------------IMPORT DE MODELS--------------------------------
 
 
 
-# Definimos usuario como el modelo de usuario
-User = get_user_model()
+# # Definimos usuario como el modelo de usuario
+# User = get_user_model()
 
 
 
@@ -98,3 +98,39 @@ class EditProfileForm(forms.ModelForm):
             # Le insertamos los estilos al campo
             'class': 'max-w-lg block w-full shadow-sm dark:bg-dark-third dark:text-dark-txt dark:border-dark-third focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'}), 
             required=False)
+    
+
+    # Definimos una clase Meta para poder editar los campos del perfil del usuario
+    class Meta:
+
+        # Definimos el modelo como Profile
+        model = Profile
+
+        # Definimos los campos que queremos editar
+        # fields es una lista de los campos que queremos editar del perfil
+        fields = [
+
+            # Primer nombre
+            'first_name', 
+
+            # Apellido
+            'last_name', 
+
+            # Imagen de perfil
+            'picture', 
+
+            # Imagen de banner
+            'banner', 
+
+            # Ubicacion del usuario
+            'location', 
+
+            # Página web personal
+            'website', 
+
+            # Biografia del usuario
+            'biography', 
+
+            # Fecha de nacimiento del usuario
+            'birthday'
+            ]
