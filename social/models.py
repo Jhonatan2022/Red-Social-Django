@@ -16,7 +16,6 @@ User = get_user_model()
 
 
 #--------------------------------MODELS--------------------------------
-
 # Definimos en donde e subiran las imagenes de los posts
 def user_directory_path(instance, filename):
 
@@ -49,3 +48,74 @@ class SocialPost(models.Model):
     # Definimos la fecha de publicación del post
     # default=timezone.now para que la fecha de publicación sea la fecha actual
     created_on = models.DateTimeField(default=timezone.now)
+
+
+    # Definimos el autor del post
+    # on_delete=models.CASCADE para que si se elimina el usuario se eliminen sus posts
+    # related_name='social_posts_author' para que se pueda acceder a los posts de un usuario
+    # ForeignKey para que un post solo pueda tener un autor y un autor pueda tener varios posts
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_posts_author')
+
+
+    # Definimos los likes del post
+    # ManyToManyField para que un post pueda tener varios likes
+    # blank=True para que no sea obligatorio dar like
+    # related_name='likes' para que se pueda acceder a los likes de un post
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
+
+
+    # Definimos los dislikes del post
+    # ManyToManyField para que un post pueda tener varios dislikes
+    # blank=True para que no sea obligatorio dar dislike
+    # related_name='dislikes' para que se pueda acceder a los dislikes de un post
+    dislikes = models.ManyToManyField(User, blank=True, related_name='dislikes')
+
+
+
+
+# Definimos el modelo de comentarios de los posts 
+class SocialComment(models.Model):
+
+
+    # Definimos los comentarios del post
+    # TextField para que el comentario pueda ser largo
+    comment = models.TextField()
+
+
+    # Definimos la fecha de publicación del comentario del post
+    # default=timezone.now para que la fecha de publicación sea la fecha actual
+    created_on = models.DateTimeField(default=timezone.now)
+
+
+    # Definimos el autor del comentario del post
+    # on_delete=models.CASCADE para que si se elimina el usuario se eliminen sus comentarios
+    # related_name='social_comments_author' para que se pueda acceder a los comentarios de un usuario
+    # ForeignKey para que un comentario solo pueda tener un autor y un autor pueda tener varios comentarios
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_comments_author')
+
+
+    # Definimos los likes del comentario del post
+    # ManyToManyField para que un comentario pueda tener varios likes
+    # blank=True para que no sea obligatorio dar like
+    # related_name='comment_likes' para que se pueda acceder a los likes de un comentario
+    likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
+
+
+    # Definimos los dislikes del comentario del post
+    # ManyToManyField para que un comentario pueda tener varios dislikes
+    # blank=True para que no sea obligatorio dar dislike
+    # related_name='comment_dislikes' para que se pueda acceder a los dislikes de un comentario
+    dislikes = models.ManyToManyField(User, blank=True, related_name='comment_dislikes')
+
+
+
+# Definimos el modelo de imagenes de los posts
+class Image(models.Model):
+
+
+    # Definimos la imagen del post
+    # ImageField para que la imagen sea una imagen
+    # upload_to=user_directory_path para que la imagen se suba a la ruta definida en user_directory_path
+    # blank=True para que no sea obligatorio subir una imagen
+    # null=True para que no sea obligatorio subir una imagen
+    image = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
