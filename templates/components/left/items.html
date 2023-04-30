@@ -1,16 +1,15 @@
 {% load static %}
-
 <ul class="p-4">
     <li>
-        <a href="{% url 'users:profile' user.username %}" class="flex items-center space-x-4 p-2 hover:bg-red-300 rounded-lg transition-all dark:text-dark-txt dark:hover:bg-dark-third">
-            <img src="{{ user.profile.picture.url }}" alt="Profile picture" class="w-12 h-12  rounded-full">
-            <span class="font-semibold">{{ user.username }} </span>
+        <a href="{% url 'users:profile' user.username %}" class="flex items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg transition-all dark:text-dark-txt dark:hover:bg-dark-third">
+            <img src="{{user.profile.picture.url}}" alt="Profile picture" class="w-10 h-10 rounded-full">
+            <span class="font-semibold">{{user.username}}</span>
         </a>
     </li>
     <li>
-        <a href="#" class="flex items-center mt-6 space-x-2 p-2 hover:bg-blue-200 rounded-lg transition-all dark:text-dark-txt dark:hover:bg-dark-third dark:focus:bg-dark-second">
+        <a href="#" class="flex items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg transition-all dark:text-dark-txt dark:hover:bg-dark-third dark:focus:bg-dark-second">
             <i class='bx bx-group text-gray-500'></i>
-            <span class="font-semibold">Friends Warriors</span>
+            <span class="font-semibold">Friends</span>
         </a>
     </li>
     {% comment %} <li>
