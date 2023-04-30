@@ -1,22 +1,18 @@
 {% load static %}
 {% load tailwind_tags %}
 {% load tailwind_filters %}
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon2.png' %}">
-
     <!-- Tailwind -->
     {% tailwind_css %}
 
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-
     <!-- Extras CSS/JS -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 
@@ -36,7 +32,6 @@
      </div>
     <!--RIGHT SIDEBAR-->
 
-    <!-- FOOTER -->
     <!-- Scripts -->
     {% block javascript %}{% endblock javascript %}
 </body>
