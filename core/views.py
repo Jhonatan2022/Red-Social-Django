@@ -16,8 +16,8 @@ from django.core.paginator import Paginator
 # Importamos LoginRequiredMixin para poder comprobar si el usuario esta logueado
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-# Importamos el modelo Post para poder crear los formularios
-from social.models import SocialPost, SocialComment
+# Importamos el formulario para crear posts y comentarios
+from social.forms import SocialPostForm
 #--------------------------IMPORTS---------------------------------#
 
 
@@ -38,7 +38,7 @@ class HomeView(LoginRequiredMixin, View):
         logged_in_user = request.user
 
         # Definimos el formulario para crear posts
-        form = SocialPost()
+        form = SocialPostForm()
         
         # Creamos el contexto para la pagina principal
         # Contexto es un diccionario que contiene los datos que se van a pasar a la pagina html
@@ -62,7 +62,7 @@ class HomeView(LoginRequiredMixin, View):
 
         # Definimos el formulario para crear posts
         # Le pasamos los datos que nos llegan por post y files
-        form = SocialPost(request.POST, request.FILES)
+        form = SocialPostForm(request.POST, request.FILES)
 
         # Definimos las imagenes que nos llegan por post
         files = request.FILES.getlist('image')
@@ -70,7 +70,6 @@ class HomeView(LoginRequiredMixin, View):
 
         # Comprobamos si el formulario es valido
         if form.is_valid():
-
             # Creamos el post con los datos del formulario
             # commit=False para que no se guarde en la base de datos
             new_post = form.save(commit=False)
@@ -82,10 +81,10 @@ class HomeView(LoginRequiredMixin, View):
             new_post.save()
 
             # Recorremos las imagenes que nos llegan por post
-            for file in files:
+            for f in files:
 
                 # Definimos image como la imagen que nos llega por post
-                img = Image(image=file)
+                img = Image(image=f)
 
                 # Guardamos la imagen en la base de datos
                 img.save()
@@ -93,11 +92,9 @@ class HomeView(LoginRequiredMixin, View):
                 # Añadimos la imagen al post
                 new_post.image.add(img)
 
-
             # Guardamos el post en la base de datos
             new_post.save()
-
-
+            
         
         # Creamos el contexto para la pagina principal
         # Contexto es un diccionario que contiene los datos que se van a pasar a la pagina html
