@@ -1,7 +1,9 @@
 #--------------------------IMPORTS---------------------------------#
 
 # Importamos Images de social para poder crear las imagenes
-from social.models import Image
+# Importamos SocialPost de social para poder crear los posts
+# Importamos SocialComment de social para poder crear los comentarios
+from social.models import Image, SocialPost, SocialComment
 
 # Importamos los modelos de la base de datos para poder usarlos en las vistas
 from django.views.generic import TemplateView, View
@@ -37,6 +39,10 @@ class HomeView(LoginRequiredMixin, View):
         # Obtenemos al usuario que este logueado
         logged_in_user = request.user
 
+
+        # Obtenemos todos los posts de la base de datos
+        posts = SocialPost.objects.all()
+
         # Definimos el formulario para crear posts
         form = SocialPostForm()
         
@@ -46,6 +52,9 @@ class HomeView(LoginRequiredMixin, View):
 
             # Definimos el formulario para crear posts
             'form': form,
+
+            # Definimos los posts
+            'posts': posts,
         }
 
         # Retornamos la pagina principal
@@ -59,6 +68,11 @@ class HomeView(LoginRequiredMixin, View):
 
         # Obtenemos al usuario que este logueado
         logged_in_user = request.user
+
+
+        # Obtenemos todos los posts de la base de datos
+        posts = SocialPost.objects.all()
+
 
         # Definimos el formulario para crear posts
         # Le pasamos los datos que nos llegan por post y files
@@ -102,6 +116,9 @@ class HomeView(LoginRequiredMixin, View):
 
             # Definimos el formulario para crear posts
             'form': form,
+
+            # Definimos los posts
+            'posts': posts,
         }
 
         # Retornamos la pagina principal

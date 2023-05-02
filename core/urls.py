@@ -32,19 +32,29 @@ from .views import HomeView
 
 
 
+
 #----------------------------RUTAS DE LA APLICACIÓN-----------------------------#
 # Creamos las rutas
 urlpatterns = [
 
+
     # Ruta para acceder al panel de administración
     path('admin/', admin.site.urls),
+
 
     # Coloca la ruta de la aplicación que creaste en la carpeta apps
     path('accounts/', include('allauth.urls')),
 
+
     # Colocamos la ruta de users creada en accounts
     # namespace: Es el nombre de la aplicación que creamos en accounts
     path('users/', include('accounts.urls', namespace='users')),
+
+
+    # Colocamos la ruta de social creada en social
+    # namespace: Es el nombre de la aplicación que creamos en social
+    path('social/', include('social.urls', namespace='social')),
+
 
     # Ruta para acceder a la pagina principal
     # Al ser una vista de clase, colocamos as_view() para que se ejecute el metodo get
@@ -53,7 +63,10 @@ urlpatterns = [
 #----------------------------RUTAS DE LA APLICACIÓN-----------------------------#
 
 
+
+# Si estamos en modo DEBUG, añadimos las rutas de los archivos estaticos
 if settings.DEBUG:
 
+    # Añadimos las rutas de los archivos estaticos
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
