@@ -14,13 +14,9 @@ env\Scripts\activate
 pip install -r requirements.txt
 # or pip install -r requirements.sh
 
-# Creamos el proyecto
-django-admin startproject myproject
 
-
-# Creamos la aplicación
-python manage.py startapp myapp
-
+# Creamos las migraciones
+python manage.py makemigrations
 
 # Creamos la base de datos
 python manage.py migrate
@@ -36,6 +32,9 @@ python manage.py runserver
 
 # Conectamos tailwind con django
 python manage.py tailwind init
+
+# Corremos tailwind en modo desarrollo
+python manage.py tailwind start
 
 
 # comando para generar archivo con las dependencias
