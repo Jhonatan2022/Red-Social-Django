@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tailwind_tags %}
 {% load tailwind_filters %}
 {% load humanize %}
-
 {% block title %}{{user.username}} Details{% endblock title %}
 {% block extra_head %}{% endblock extra_head %}
 
@@ -14,7 +14,7 @@
 <!-- MAIN -->
 <!-- left sidebar -->
 {% block left_sidebar %}
-{% include 'components/sidebars/left/sidebar.html' %}
+{% include 'components/left/sidebar.html' %}
 {% endblock left_sidebar %}
 
 <!-- main content -->
@@ -24,7 +24,6 @@
         <h3 class="text-xl leading-6 cursor-default dark:text-dark-txt prose rounded font-bold text-gray-900">
         Post Details
         </h3>
-
         <p class="mt-1 text-sm cursor-default dark:text-dark-txt text-gray-500">
         This is a post detail view, you can see the content, comment and share your thoughts on this topic.
         Hint: Add a comment by clicking in the button below that says <span class="font-bold">Comment</span>
@@ -40,7 +39,6 @@
             {% endfor %}
         </div>
         {% endif %}
-        
         <!-- END POST IMAGE -->
 
         <!-- POST MULTIPLE IMAGE -->
@@ -49,14 +47,11 @@
             <div class="grid grid-cols-3 gap-1">
             {% for img in post.image.all %}
                 <img src="{{ img.image.url }}" alt="Post image">
-                
             {% endfor %}
-                
             </div>
         </div>
         {% endif %}
         <!-- END POST IMAGE -->
-          
         
         <!-- POST AUTHOR -->
         <div class="flex items-center justify-between px-4 py-2">
@@ -154,9 +149,8 @@
         <!-- POST ACTION -->
         <div  x-data="{open:false}" class="py-2 px-4">
             <div class="border border-gray-200 dark:border-dark-third border-l-0 border-r-0 py-1">
-                <div class="flex space-x-2">
-                    
-                    <form method="POST" action="#" class="mt-2 px-2">
+                <div class="flex space-x-2">  
+                    <form method="POST" action="{% url 'social:like' post.pk %}" class="mt-2 px-2">
                         {% csrf_token %}
                         <input type="hidden" name="next" value="{{request.path}}">
                         <button type="submit" class=" flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
@@ -164,8 +158,7 @@
                             <p class="text-sm font-semibold">Like</p>
                         </button> 
                     </form>
-
-                    <form method="POST" action="#" class="mt-2 px-2">
+                    <form method="POST" action="{% url 'social:dislike' post.pk %}" class="mt-2 px-2">
                         {% csrf_token %}
                         <input type="hidden" name="next" value="{{request.path}}">
                         <button type="submit" class=" flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
@@ -196,7 +189,6 @@
                         <div class="inline-block align-bottom dark:bg-dark-second bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
                             
                             <div>
-                                
                                 <div class="mt-3 text-center sm:mt-5">
                                     <h3 class="text-lg leading-6 font-medium dark:text-dark-txt text-gray-900" id="modal-title">
                                     Comment Something
@@ -210,7 +202,6 @@
                             </div>
 
                             <div class="grid grid-cols-3">
-
                                 <div class="mt-5 sm:mt-6 ">
                                     {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
                                         Body
@@ -230,31 +221,30 @@
                         </div>
                         </div>
                     </div>
-                    <!-- COMMENT POST MODAL -->             
+                    <!-- COMMENT POST MODAL -->
                 </div>
             </div>
         </div>
         <!-- END POST ACTION -->
 
-
         <!-- LIST COMMENT -->
-        {% comment %} <div class="py-2 px-4 max-w-full">
+        <div class="py-2 px-4 max-w-full">
             <!-- COMMENT -->
             {% for comment in comments %}
             {% if comment.is_parent %}
             <div class="flex space-x-2">
-                <a href="{% url 'profile' comment.author.username %}">
+                <a href="{% url 'users:profile' comment.author.username %}">
                 <img src="{{comment.author.profile.picture.url}}" alt="Profile picture" class="w-9 h-9 rounded-full">
                 </a>
                 <div>
                     <div class="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
                         
-                        <a href="{% url 'profile' username=post.author.username %}" class="font-semibold block hover:text-blue-500 dark:text-dark-txt"><p>{{comment.author}}</p></a>
+                        <a href="{% url 'users:profile' username=post.author.username %}" class="font-semibold block hover:text-blue-500 dark:text-dark-txt"><p>{{comment.author}}</p></a>
                         
                         <span class="dark:text-dark-txt">{{comment.comment}}</span>
                         <span class="text-xs dark:text-dark-txt text-gray-500 float-right">{{comment.created_on | naturaltime}}</span>
-                    </div> 
-
+                    </div>
+                    
                     <div x-data="{open:false}" class=" text-xs text-gray-500 dark:text-dark-txt">
                         {% if request.user == comment.author %}
                             <a href="{% url 'social:comment-edit' post.pk comment.pk %}" class="font-semibold cursor-pointer">Edit</a>
@@ -279,7 +269,6 @@
                                 <p class="text-sm font-semibold"></p>
                             </button> 
                         </form>
-
 
                         <button @click="open = true" class="inline-flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xs py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
                         <i class='mr-2 bx bx-comment'></i>
@@ -309,7 +298,9 @@
                                     </div>
                                     
                                     <div class="mt-5 sm:mt-6 ">
-                                   
+                                    {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+                                        Body
+                                    </label> {% endcomment %}
                                     <form method="POST" action="{% url 'social:comment-reply' post.pk comment.pk %}" class="inline-flex">
                                         {% csrf_token %}
                                         {{form.comment}}
@@ -318,7 +309,7 @@
                                             Post
                                             </button>
                                         </div>
-                                    </form> 
+                                    </form>
                                 </div>
 
                                     </div>
@@ -330,18 +321,18 @@
                                 </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                     
                     <!-- REPLY COMMENT -->
                     {% for child_comment in comment.children %}
                     <div class="flex space-x-2">
-                        <a href="{% url 'profile' comment.author.username %}">
+                        <a href="{% url 'users:profile' comment.author.username %}">
                         <img src="{{child_comment.author.profile.picture.url}}" alt="Profile picture" class="w-9 h-9 rounded-full">
                         </a>
                         <div>
                             <div class="bg-gray-100 dark:bg-dark-third p-2 rounded-2xl text-sm">
-                                <a href="{% url 'profile' username=post.author.username %}" class="font-semibold block hover:text-blue-500 dark:text-dark-txt"><p>{{child_comment.author}}</p></a>
+                                <a href="{% url 'users:profile' username=post.author.username %}" class="font-semibold block hover:text-blue-500 dark:text-dark-txt"><p>{{child_comment.author}}</p></a>
                                 <span class="dark:text-dark-txt">{{child_comment.comment}}</span>
                             <span class="text-xs dark:text-dark-txt text-gray-500 float-right">{{child_comment.created_on | naturaltime}}</span>
                             </div>
@@ -375,13 +366,12 @@
                     {% endfor %}
                      
                     <!-- END REPLY COMMENT -->
-
                 </div>
             </div>
             {% endif %}
             {% endfor %}
             <!-- END COMMENT -->
-        </div> {% endcomment %}
+        </div>
         <!-- END LIST COMMENT -->
 <!--end visible post-->
 </div>
