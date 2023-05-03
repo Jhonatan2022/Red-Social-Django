@@ -8,6 +8,8 @@ from .models import SocialPost, SocialComment
 # -----------------------------IMPORT FORMS-------------------------------------
 
 
+
+
 # -----------------------------CREATE FORMS-------------------------------------
 # Creamos el formulario para crear posts
 class SocialPostForm(forms.ModelForm):
@@ -52,3 +54,34 @@ class SocialPostForm(forms.ModelForm):
 
         # fields nos permite definir los campos del formulario que vamos a editar
         fields = ['body']
+
+
+
+
+# Creamos el formulario para crear comentarios
+class SocialCommentForm(forms.ModelForm):
+
+    # Definimos el cuerpo del comentario como un campo de texto
+    # CharField para que el cuerpo del comentario sea un campo de texto corto
+    # widget=forms.Textarea para que el cuerpo del comentario sea un campo de texto largo
+    # attrs nos permite añadir atributos al campo de texto
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={
+
+            # Definimos el estilo del campo de texto
+            'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-dark-third dark:border-dark-third dark:text-dark-txt flex max-w-full sm:text-sm border-gray-300 rounded-md',
+            'rows': '1',
+            'placeholder': 'Comment Something...'
+        }),
+        # Usamos required=True para que el campo de texto sea obligatorio
+        required=True)
+
+
+    # Definimos la clase Meta para el formulario de crear comentarios
+    class Meta:
+
+        # Definimos el modelo del formulario que vamos a editar
+        model = SocialComment
+
+        # fields nos permite definir los campos del formulario que vamos a editar
+        fields = ['comment']

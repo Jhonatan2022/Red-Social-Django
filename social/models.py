@@ -94,6 +94,13 @@ class SocialComment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_comments_author')
 
 
+    # Definimos el post del comentario del post
+    # on_delete=models.CASCADE para que si se elimina el post se eliminen sus comentarios
+    # related_name='social_comments_post' para que se pueda acceder a los comentarios de un post
+    # ForeignKey para que un comentario solo pueda tener un post y un post pueda tener varios comentarios
+    post = models.ForeignKey('SocialPost', on_delete=models.CASCADE)
+
+
     # Definimos los likes del comentario del post
     # ManyToManyField para que un comentario pueda tener varios likes
     # blank=True para que no sea obligatorio dar like
