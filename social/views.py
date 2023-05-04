@@ -1,3 +1,6 @@
+# Importamos SocialCommentForm para poder crear los comentarios
+from social.forms import SocialCommentForm
+
 # Importamos LoginRequiredMixin para que solo los usuarios logueados puedan acceder a las vistas
 # Importamos UserPassesTestMixin para que solo los usuarios que hayan creado el post puedan editarlos
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -38,11 +41,25 @@ class PostDetailView(LoginRequiredMixin, View):
         # Usamos pk para poder acceder a los posts mediante la url
         post = SocialPost.objects.get(pk=pk)
 
+        # Creamos la posibilidad de crear un comentario
+        form = SocialCommentForm()
+
+        # Cargamos todos los comentarios del post
+        # Usamos order_by para ordenar los comentarios de mas reciente a mas antiguo
+        # Usamos -created_on para ordenar los comentarios de mas reciente a mas antiguo
+        comments = SocialComment.objects.filter(post=post).order_by('-created_on')
+
         # Creamos el contexto
         context = {
 
             # Pasamos el post para poder acceder a los posts especificos
             'post': post,
+
+            # Pasamos el formulario para poder crear comentarios
+            'form': form,
+
+            # Pasamos los comentarios para poder acceder a los comentarios especificos
+            'comments': comments
         }
 
         # Retornamos la plantilla de detalle de los posts
@@ -58,11 +75,44 @@ class PostDetailView(LoginRequiredMixin, View):
         # Usamos pk para poder acceder a los posts mediante la url
         post = SocialPost.objects.get(pk=pk)
 
+        # Creamos la posibilidad de crear un comentario
+        form = SocialCommentForm(request.POST)
+
+        # Cargamos todos los comentarios del post
+        # Usamos order_by para ordenar los comentarios de mas reciente a mas antiguo
+        # Usamos -created_on para ordenar los comentarios de mas reciente a mas antiguo
+        comments = SocialComment.objects.filter(post=post).order_by('-created_on')
+
+        # Validamos el formulario
+        if form.is_valid():
+
+            # Guardamos el comentario pero no lo subimos a la base de datos
+            new_comment = form.save(commit=False)
+
+            # Guardamos el autor del comentario
+            new_comment.author = request.user
+
+            # Guardamos el post al que pertenece el comentario
+            new_comment.post = post
+
+            # Subimos el comentario a la base de datos
+            new_comment.save()
+
+            # Redireccionamos a la url de detalle del post
+            # Usamos kwargs para pasarle el id del post que queremos editar
+            return HttpResponseRedirect(reverse_lazy('social:post-detail', kwargs={'pk': pk}))
+
         # Creamos el contexto
         context = {
 
             # Pasamos el post para poder acceder a los posts especificos
             'post': post,
+
+            # Pasamos el formulario para poder crear comentarios
+            'form': form,
+
+            # Pasamos los comentarios para poder acceder a los comentarios especificos
+            'comments': comments
         }
 
         # Retornamos la plantilla de detalle de los posts
