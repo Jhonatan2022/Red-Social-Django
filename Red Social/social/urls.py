@@ -7,7 +7,7 @@ from django.urls import path
 # PostDeleteView: Vista de eliminar los posts
 # AddLike: Vista de agregar likes
 # AddDislike: Vista de agregar dislikes
-from .views import PostDetailView, PostEditView, PostDeleteView, AddLike, AddDislike
+from .views import PostDetailView, PostEditView, PostDeleteView, AddLike, AddDislike, CommentReplyView, CommentEditView, CommentDeleteView, AddCommentDislike, AddCommentLike
 #------------------------------IMPORT BOOKSTORES----------------------
 
 
@@ -41,4 +41,24 @@ urlpatterns = [
 
     # Declaramos la url de agregar dislikes y le pasamos el pk para poder acceder a los posts mediante la url
     path('post/<int:pk>/dislike/', AddDislike.as_view(), name='dislike'),
+
+
+    # Declaramos la url de eliminar comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
+    path('post/<int:post_pk>/comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment-delete'),
+
+
+    # Declaramos la url de editar comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
+    path('post/<int:post_pk>/comment/edit/<int:pk>/', CommentEditView.as_view(), name='comment-edit'),
+
+
+    # Declaramos la url de agregar likes a los comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
+    path('post/<int:post_pk>/comment/<int:pk>/like/', AddCommentLike.as_view(), name='comment-like'),
+
+
+    # Declaramos la url de agregar dislikes a los comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
+    path('post/<int:post_pk>/comment/<int:pk>/dislike/', AddCommentDislike.as_view(), name='comment-dislike'),
+
+
+    # Declaramos la url de agregar respuestas a los comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
+    path('post/<int:post_pk>/comment/<int:pk>/reply/', CommentReplyView.as_view(), name='comment-reply'),
 ]

@@ -326,7 +326,7 @@ class AddDislike(LoginRequiredMixin, View):
 
 
 # Creamos una vista para poder dar like a los comentarios
-class AddLikeComment(LoginRequiredMixin, View):
+class AddCommentLike(LoginRequiredMixin, View):
 
     # Utilizamos post para poder dar like a los comentarios
     # Jalamos el pk para poder dar like a los comentarios mediante la url
@@ -396,7 +396,7 @@ class AddLikeComment(LoginRequiredMixin, View):
 
 
 # Creamos una vista para poder dar dislike a los comentarios
-class AddDislikeComment(LoginRequiredMixin, View):
+class AddCommentDislike(LoginRequiredMixin, View):
 
     # Utilizamos post para poder dar dislike a los comentarios
     # Jalamos el pk para poder dar dislike a los comentarios mediante la url
@@ -476,7 +476,7 @@ class CommentReplyView(LoginRequiredMixin, View):
         
         # Llamamos al modelo Comment para poder responder comentarios
         # Usamos pk para poder responder comentarios mediante la url
-        post = SocialComment.objects.get(pk=post_pk)
+        post = SocialPost.objects.get(pk=post_pk)
 
         # Obtenemos el comentario padre mediante el pk
         parent_comment = SocialComment.objects.get(pk=pk)
@@ -506,3 +506,72 @@ class CommentReplyView(LoginRequiredMixin, View):
 
             # Retornamos y redireccionamos al post detail
             return redirect('social:post-detail', pk=post_pk)
+
+
+
+
+# Creamos una vista para poder eliminar comentarios
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+    # Llamamos al modelo Comment para poder eliminar comentarios
+    model = SocialComment
+
+    # Llamamos al template de eliminar comentarios
+    template_name = 'pages/social/comment_delete.html'
+
+    # Indicamos el nombre de la url a la que queremos redireccionar
+    def get_success_url(self):
+
+        # Obtenemos el id del post que queremos editar por medio de kwargs
+        pk = self.kwargs['post_pk']
+
+        # Redireccionamos a la url de detalle del post
+        # Usamos kwargs para pasarle el id del post que queremos editar
+        # kwargs nos sirve para pasar los elementos que tiene un objeto
+        return reverse_lazy('social:post-detail', kwargs={'pk': pk})
+    
+
+    # Creamos una funcion para poder comprobar si el usuario logueado es el autor del post
+    def test_func(self):
+
+        # Obtenemos el id del post que queremos editar por medio de kwargs
+        post = self.get_object()
+
+        # Retornamos si el usuario logueado es el autor del post
+        return self.request.user == post.author
+    
+
+
+
+# Creamos la vista para poder editar comentarios
+class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+    # Llamamos al modelo Comment para poder editar comentarios
+    model = SocialComment
+
+    # Indicamos los campos que vamos a editar
+    fields = ['comment']
+
+    # Llamamos al template de editar comentarios
+    template_name = 'pages/social/comment_edit.html'
+
+    # Indicamos el nombre de la url a la que queremos redireccionar
+    def get_success_url(self):
+
+        # Obtenemos el id del post que queremos editar por medio de kwargs
+        pk = self.kwargs['post_pk']
+
+        # Redireccionamos a la url de detalle del post
+        # Usamos kwargs para pasarle el id del post que queremos editar
+        # kwargs nos sirve para pasar los elementos que tiene un objeto
+        return reverse_lazy('social:post-detail', kwargs={'pk': pk})
+    
+
+    # Creamos una funcion para poder comprobar si el usuario logueado es el autor del post
+    def test_func(self):
+
+        # Obtenemos el id del post que queremos editar por medio de kwargs
+        post = self.get_object()
+
+        # Retornamos si el usuario logueado es el autor del post
+        return self.request.user == post.author
