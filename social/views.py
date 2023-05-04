@@ -6,7 +6,7 @@ from social.forms import SocialCommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Importamos render para poder renderizar las vistas
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Importamos reverse_lazy para poder redireccionar a una url
 from django.urls.base import reverse_lazy
@@ -321,3 +321,188 @@ class AddDislike(LoginRequiredMixin, View):
 
         # Retornamos la redireccion
         return HttpResponseRedirect(next)
+    
+
+
+
+# Creamos una vista para poder dar like a los comentarios
+class AddLikeComment(LoginRequiredMixin, View):
+
+    # Utilizamos post para poder dar like a los comentarios
+    # Jalamos el pk para poder dar like a los comentarios mediante la url
+    def post(self, request, pk, *args, **kwargs):
+
+        # Llamamos al modelo Comment para poder dar like a los comentarios
+        # Usamos pk para poder dar like a los comentarios mediante la url
+        comment = SocialComment.objects.get(pk=pk)
+
+
+
+        # Iniciamos diciendo que dislike es falso
+        is_dislike = False
+
+        # Cremos un ciclo for para poder recorrer los likes
+        for dilike in comment.dislikes.all():
+
+            # Comprobamos si el usuario logueado esta en los dislikes
+            if dilike == request.user:
+
+                # Si el usuario logueado esta en los dislikes, entonces dislike es verdadero
+                is_dislike = True
+                # Rompemos el ciclo
+                break
+
+        # Si dislike es verdadero, entonces eliminamos el dislike
+        if is_dislike:
+
+            # Eliminamos el dislike
+            comment.dislikes.remove(request.user)
+
+
+        # Iniciamos diciendo que like es falso
+        is_like = False
+
+        # Cremos un ciclo for para poder recorrer los likes
+        for like in comment.likes.all():
+
+            # Comprobamos si el usuario logueado esta en los likes
+            if like == request.user:
+
+                # Si el usuario logueado esta en los likes, entonces like es verdadero
+                is_like = True
+                # Rompemos el ciclo
+                break
+
+        # Si like es falso, entonces agregamos el like
+        if not is_like:
+
+            # Agregamos el like
+            comment.likes.add(request.user)
+
+        # Si like es verdadero, entonces eliminamos el like
+        if is_like:
+
+            # Eliminamos el like
+            comment.likes.remove(request.user)
+
+
+        # Redireccionamos a la url de inicio
+        next = request.POST.get('next', '/')
+
+        # Retornamos la redireccion
+        return HttpResponseRedirect(next)
+
+
+
+
+# Creamos una vista para poder dar dislike a los comentarios
+class AddDislikeComment(LoginRequiredMixin, View):
+
+    # Utilizamos post para poder dar dislike a los comentarios
+    # Jalamos el pk para poder dar dislike a los comentarios mediante la url
+    def post(self, request, pk, *args, **kwargs):
+
+        # Llamamos al modelo Comment para poder dar dislike a los comentarios
+        # Usamos pk para poder dar dislike a los comentarios mediante la url
+        comment = SocialComment.objects.get(pk=pk)
+
+
+
+        # Iniciamos diciendo que like es falso
+        is_like = False
+
+        # Cremos un ciclo for para poder recorrer los likes
+        for like in comment.likes.all():
+
+            # Comprobamos si el usuario logueado esta en los likes
+            if like == request.user:
+
+                # Si el usuario logueado esta en los likes, entonces like es verdadero
+                is_like = True
+                # Rompemos el ciclo
+                break
+
+        # Si like es verdadero, entonces eliminamos el like
+        if is_like:
+
+            # Eliminamos el like
+            comment.likes.remove(request.user)
+
+
+        # Iniciamos diciendo que dislike es falso
+        is_dislike = False
+
+        # Cremos un ciclo for para poder recorrer los dislikes
+        for dilike in comment.dislikes.all():
+
+            # Comprobamos si el usuario logueado esta en los dislikes
+            if dilike == request.user:
+
+                # Si el usuario logueado esta en los dislikes, entonces dislike es verdadero
+                is_dislike = True
+                # Rompemos el ciclo
+                break
+
+
+        # Si dislike es falso, entonces agregamos el dislike
+        if not is_dislike:
+
+            # Agregamos el dislike
+            comment.dislikes.add(request.user)
+
+
+        # Si dislike es verdadero, entonces eliminamos el dislike
+        if is_dislike:
+
+            # Eliminamos el dislike
+            comment.dislikes.remove(request.user)
+
+
+        # Redireccionamos a la url de inicio
+        next = request.POST.get('next', '/')
+
+        # Retornamos la redireccion
+        return HttpResponseRedirect(next)
+    
+
+
+
+# Creamos una vista para poder responder comentarios
+class CommentReplyView(LoginRequiredMixin, View):
+
+    # Utilizamos post para poder responder comentarios
+    # Jalamos el pk para poder responder comentarios mediante la url
+    def post(self, request, post_pk, pk, *args, **kwargs):
+        
+        # Llamamos al modelo Comment para poder responder comentarios
+        # Usamos pk para poder responder comentarios mediante la url
+        post = SocialComment.objects.get(pk=post_pk)
+
+        # Obtenemos el comentario padre mediante el pk
+        parent_comment = SocialComment.objects.get(pk=pk)
+
+        # Llamamos al formulario de responder comentarios
+        form = SocialCommentForm(request.POST)
+
+
+        # Si el formulario es valido
+        if form.is_valid():
+
+            # Guardamos el formulario
+            new_comment = form.save(commit=False)
+
+            # Guardamos el usuario logueado
+            new_comment.author = request.user
+
+            # Guardamos el post
+            new_comment.post = post
+
+            # Guardamos el comentario padre
+            new_comment.parent = parent_comment
+
+            # Guardamos el formulario
+            new_comment.save()
+            
+
+            # Retornamos y redireccionamos al post detail
+            return redirect('social:post-detail', pk=post_pk)

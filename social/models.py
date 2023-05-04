@@ -115,6 +115,46 @@ class SocialComment(models.Model):
     dislikes = models.ManyToManyField(User, blank=True, related_name='comment_dislikes')
 
 
+    # Definimos el comentario padre del comentario del post
+    # on_delete=models.CASCADE para que si se elimina el comentario padre se eliminen sus comentarios hijos
+    # related_name='+' para que no se pueda acceder a los comentarios hijos de un comentario
+    # ForeignKey para que un comentario solo pueda tener un comentario padre y un comentario padre pueda tener varios comentarios hijos
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
+
+
+    # Declaramos una propiedad para saber si el comentario tiene un comentario padre
+    # Usamos @property para que se ejecute la función y no se guarde en la base de datos
+    # property nos sirve para acceder a la función como si fuera un atributo
+    @property
+
+    # Definimos si el comentario tiene un comentario padre
+    def children(self):
+
+        # Retornamos todos los comentarios hijos de un comentario padre
+        # Usamos all() para que se ejecute la consulta a la base de datos
+        # Usamos order_by('-created_on') para que los comentarios hijos se ordenen por fecha de publicación descendente
+        return SocialComment.objects.filter(parent=self).order_by('-created_on').all()
+    
+
+
+    # Declaramos una propiedad para saber si el comentario es pariente de otro comentario
+    # Usamos @property para que se ejecute la función y no se guarde en la base de datos
+    # property nos sirve para acceder a la función como si fuera un atributo
+    @property
+
+    # Definimos si el comentario es pariente de otro comentario
+    def is_parent(self):
+
+        # Retornamos si el comentario tiene un comentario padre
+        if self.parent is None:
+
+            # Retornamos True si el comentario no tiene un comentario padre
+            return True
+        
+        # Retornamos False si el comentario tiene un comentario padre
+        return False
+
+
 
 # Definimos el modelo de imagenes de los posts
 class Image(models.Model):
