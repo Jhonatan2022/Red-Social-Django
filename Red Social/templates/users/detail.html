@@ -1,18 +1,21 @@
 {% extends 'users/base.html' %}
+
 {% load static %}
 {% load tailwind_tags %}
 {% load tailwind_filters %}
 {% load humanize %}
+
 {% block navbar %}
 {% include 'components/navbar.html' %}
 {% endblock navbar %}
 
 {% block content %}
+
 <main class=' min-h-screen w-full py-5 overflow-x-hidden'>
     <!--banner img-->
     <div class="relative bg-gray-800 max-w-full">
         <div class="absolute inset-0">
-            <img class="m-auto w-full h-full object-cover" src="{{profile.banner.url}}" alt="">
+            <img class="w-full h-full object-cover" src="{{profile.banner.url}}" alt="">
             <div class="absolute inset-0 mix-blend-multiply" aria-hidden="true"></div>
         </div>
         <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8"></div>
@@ -27,19 +30,20 @@
                 <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                     <!--profile picture-->
                     <div class="flex">
-                        <img class=" h-24 w-24 rounded-full ring-4 dark:ring-dark-second ring-white sm:h-32 sm:w-32 hover:bg-gray-100" src="{{profile.picture.url}}" alt="{{profile.user.username}} Profile Picture">
+                        <img class=" h-24 w-24 rounded-full ring-4 dark:ring-dark-second ring-white sm:h-32 sm:w-32 hover:bg-gray-100"
+                        src="{{profile.picture.url}}" alt="{{profile.user.username}} Profile Picture">
                     </div>
 
                     {% if user.is_authenticated and user != profile.user %}
                         {% if is_following %}
-                        <form method="POST" action="#" >
+                        <form method="POST" action="{% url 'users:remove-follower' profile.pk %}" >
                             {% csrf_token %}
                             <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
                             Unfollow
                             </button>
                         </form>
                         {% else %}
-                        <form method="POST" action="#" >
+                        <form method="POST" action="{% url 'users:add-follower' profile.pk %}" >
                             {% csrf_token %}
                             <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 dark:bg-dark-second bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
                             Follow
@@ -51,12 +55,14 @@
                     <div x-data="{ open: false }" @keydown.window.escape="open = false" class=" mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                         <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                             {% if user.is_authenticated and user == profile.user %}
-                            <a href=" {% url 'users:edit' %} " class="inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
+                            <a href="{% url 'users:edit' %}" class="inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
                                 <span>Edit Profile</span>
                             </a>
+                            
                             {% endif %}
                         </div>
                     </div>
+                
                 </div>
 
                 <div class=" sm:block  mt-6 min-w-0 flex-1">
@@ -70,8 +76,8 @@
                     </h1>
                 </div>
 
-                {% if profile.biography %}
-                <p class="mt-2 max-w-4xl text-sm dark:text-dark-txt text-gray-500">{{profile.biography}}</p>
+                {% if profile.bio %}
+                <p class="mt-2 max-w-4xl text-sm dark:text-dark-txt text-gray-500">{{profile.bio}}</p>
                 {% endif %}
 
                 <div class="inline-flex grid-cols-4">
@@ -86,13 +92,14 @@
                 {% endif %}
 
                 <!--Website-->
-                {% if profile.website %}
+                {% if profile.url %}
                 <p class="mt-2 max-w-4xl text-sm mx-1 dark:text-dark-txt text-gray-500 cursor-default">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                  </svg><a class="text-blue-500 hover:text-blue-900" href="{{profile.website}}" target="_blank" rel="nofollow">{{profile.website}}</a>
+                  </svg><a class="text-blue-500 hover:text-blue-900" href="{{profile.url}}" target="_blank" rel="nofollow">{{profile.url}}</a>
                 </p>
                 {% endif %}
+
 
                 {% if profile.birthday %}
                 <p class="mt-2 max-w-4xl text-sm mx-1 text-gray-500 cursor-default">
@@ -104,14 +111,16 @@
                 {% endif %}
 
                 <!-- Date Joined -->
-                {% if profile.created %}
+                {% if profile.date_created %}
                 <p class="mt-2 max-w-4xl text-sm mx-1 text-gray-500 cursor-default">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>Joined {{profile.created}}
+                  </svg>Joined {{profile.date_created}}
                 </p>
                 {% endif %}
                 </div>
+
+
             </div>
         </div>
       </div>
@@ -119,37 +128,55 @@
 
     <!--Tiers-->
     <!--EndTiers-->
+
     <div class="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+
     <div x-data="{
             openTab: 1,
             activeClasses:'border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
-            inactiveClasses:'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'}">
+            inactiveClasses:'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            underlineActive: 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            underlineInactive: 'bg-transparent absolute inset-x-0 bottom-0 h-0.5'
+        }">
         <div class="">
             <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                 <!-- Current: "border-blue-500 text-blue-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
                 <button @click="openTab = 1"
-                        :class="openTab === 1 ? activeClasses : inactiveClasses">
+                        :class="openTab === 1 ? activeClasses : inactiveClasses"
+                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                 My Account
+                <span aria-hidden="true" :class="openTab === 1 ? underlineActive : underlineInactive"></span>
                 </button>
 
                 <button @click="openTab = 2"
-                        :class="openTab === 2 ? activeClasses : inactiveClasses">
+                        :class="openTab === 2 ? activeClasses : inactiveClasses"
+                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                 Company
+                <span aria-hidden="true" :class="openTab === 2 ? underlineActive : underlineInactive"></span>
                 </button>
 
                 <button @click="openTab = 3"
-                        :class="openTab === 3 ? activeClasses : inactiveClasses">
+                        :class="openTab === 3 ? activeClasses : inactiveClasses"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                 Team Members
+                <span aria-hidden="true" :class="openTab === 3 ? underlineActive : underlineInactive"></span>
                 </button>
 
                 <button @click="openTab = 4"
-                        :class="openTab === 4 ? activeClasses : inactiveClasses">
+                        :class="openTab === 4 ? activeClasses : inactiveClasses"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                 Billing
+                <span aria-hidden="true" :class="openTab === 4 ? underlineActive : underlineInactive"></span>
                 </button>
             </nav>
             </div>
         </div>
+
+
+
         <div x-show="openTab === 1">
         <!-- This example requires Tailwind CSS v2.0+ -->
 <div>
@@ -193,7 +220,7 @@
           About
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat.
+          Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.
         </dd>
       </div>
       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -240,7 +267,9 @@
     </dl>
   </div>
 </div>
-</div>
+
+        </div>
+
         <div x-show="openTab === 2">
         Tes2
         </div>
@@ -252,7 +281,13 @@
         <div x-show="openTab === 4">
         Test4
         </div>
+
+
     </div>
+
+
     </div>
+
 </main>
+
 {% endblock content %}
