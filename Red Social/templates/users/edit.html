@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% load tailwind_filters %}
+
 {% block title %}{{user.username}} Edit Profile{% endblock title %}
+
 {% block navbar %}
 {% include 'components/navbar.html' %}
 {% endblock navbar %}
+
 {% block left_sidebar %}
 {% comment %} {% include 'components/sidebars/left/users/sidebar.html' %} {% endcomment %}
 {% endblock left_sidebar %}
@@ -50,10 +55,10 @@
         </label>
         {{form.last_name}}
 
-        <label for="biograpy" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        <label for="bio" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
             Bio
         </label>
-        {{form.biography}}
+        {{form.bio}}
 
         <label for="city" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
         Location: City, Country
@@ -65,11 +70,12 @@
         </label>
         {{form.birthday}}
 
-        <label for="website" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        <label for="url" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
         Website URL
         </label>
-        {{form.website}}
+        {{form.url}}
         </div>
+
          <div class="control-group">
             <div class="controls">
             <a href="{% url 'users:profile' username=user.username %}" class="mt-4 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded dark:text-dark-txt text-indigo-700 dark:bg-dark-second bg-indigo-100 dark:hover:bg-dark-third hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-third focus:ring-indigo-500">
@@ -78,6 +84,7 @@
             Update</button>
             </div>
         </div>
+
     </div>
 </form>
 {% endblock content %}

@@ -28,8 +28,8 @@ from django.http.response import HttpResponseRedirect, HttpResponse
 
 
 
-#------------------------------VIEWS-------------------------------------
 
+#------------------------------VIEWS-------------------------------------
 # Creamos una vista para para poder acceder a los posts
 class PostDetailView(LoginRequiredMixin, View):
 
@@ -120,6 +120,7 @@ class PostDetailView(LoginRequiredMixin, View):
 
 
 
+
 # Creamos una vista para poder editar los posts
 class PostEditView(LoginRequiredMixin, UserPassesTestMixin , UpdateView):
 
@@ -157,6 +158,7 @@ class PostEditView(LoginRequiredMixin, UserPassesTestMixin , UpdateView):
 
 
 
+
 # Creamos una vista para poder eliminar los posts
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin , DeleteView):
 
@@ -181,6 +183,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin , DeleteView):
         # Comprobamos si el usuario logueado es el creador del post
         return self.request.user == post.author
     
+
 
 
 # Creamos una vista para poder dar like a los posts

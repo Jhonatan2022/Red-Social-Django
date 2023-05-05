@@ -47,25 +47,6 @@ def user_directory_path_profile(instance, filname):
 
 
 
-# Creamos una variable global para las opciones de verificar el tipo de usuario
-# Las opciones son una tupla de tuplas
-# La primera posición de la tupla es el valor que se guardará en la base de datos
-# La segunda posición de la tupla es el valor que se mostrará en el formulario
-VERIFICATION_OPTIONS = (
-
-    # La primera opción es la de no verificado
-    # La ingresamos dos veces para que este bien definida la tupla
-    ('unverified', 'unverified'),
-
-    # Como segunda opción tendremos la de verificado
-    ('verified', 'verified'),
-)
-#----------------------------VARIABLES GLOBALES----------------------------
-
-
-
-
-#----------------------------MODELS--------------------------------------
 # Creamos una función para cuando el usuario quiera subir una imagen de banner
 # La intancia hace referencia al modelo Profile (Usuario) y el filename al nombre del archivo
 def user_directory_path_banner(instance, filname):
@@ -87,6 +68,28 @@ def user_directory_path_banner(instance, filname):
     # Devolvemos la ruta donde se guardará la imagen
     return profile_picture_name
 
+
+
+
+# Creamos una variable global para las opciones de verificar el tipo de usuario
+# Las opciones son una tupla de tuplas
+# La primera posición de la tupla es el valor que se guardará en la base de datos
+# La segunda posición de la tupla es el valor que se mostrará en el formulario
+VERIFICATION_OPTIONS = (
+
+    # La primera opción es la de no verificado
+    # La ingresamos dos veces para que este bien definida la tupla
+    ('unverified', 'unverified'),
+
+    # Como segunda opción tendremos la de verificado
+    ('verified', 'verified'),
+)
+#----------------------------VARIABLES GLOBALES----------------------------
+
+
+
+
+#----------------------------MODELS--------------------------------------
 
 
 
@@ -125,6 +128,12 @@ class Profile(models.Model):
     # Usamos blank=False para que siempre tenga coins ya sea 0 o más
     coins = models.DecimalField(max_digits=19, decimal_places=2, default=0, blank=False) 
 
+    # Creamos un campo para los seguidores del usuario (relación muchos a muchos)
+    # Usamos blank=True para que no sea obligatorio
+    # Usamos related_name para poder acceder a los seguidores desde el usuario
+    # Usamos ManyToManyField para indicar que es una relación muchos a muchos
+    followers = models.ManyToManyField(User, blank=True, related_name="followers")
+    
     # Creamos un campo para la fecha de creación del perfil (auto_now_add para que se cree automáticamente)
     created = models.DateField(auto_now_add=True)
 

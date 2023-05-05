@@ -19,7 +19,22 @@ from django.contrib.auth import get_user_model
 
 # Importamos login_required para poder usar el decorador de login
 from django.contrib.auth.decorators import login_required
+
+# Importamos LoginRequiredMixin para poder usar el mixin de login
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# Importamos messages para poder mostrar mensajes en el html de la pagina
+from django.contrib import messages
+
+# Importamos loader para poder cargar los templates
+from django.template import loader
+
+# Importamos HttpResponse para poder devolver una respuesta
+from django.http import HttpResponse
 #--------------------------IMPORTS---------------------------------#
+
+
+
 
 # Definimos el modelo User como get_user_model()
 User = get_user_model()
@@ -29,14 +44,8 @@ User = get_user_model()
 
 #----------------------------VIEWS---------------------------------#
 # Creamos una vista para el perfil del usuario
-class ProfileView(View):
-
-    # Creamos una funcion para obtener el contexto
-    # request: Es la solicitud que se hace al servidor
-    # args: Es una lista de argumentos posicionales que se pasan a la vista
-    # kwargs: Es un diccionario de argumentos de palabras clave que se pasan a la vista
-    # self: Es una referencia a la instancia actual de la clase
-    def get(self, request, username, *args, **kwargs):
+@login_required
+def UserProfileView(request, username):
 
         # Obtenemos el contexto del usuario logueado
         user = get_object_or_404(User, username=username)
@@ -44,20 +53,63 @@ class ProfileView(View):
         # Determinamos si el perfil es del usuario logueado o de otro usuario
         profile = Profile.objects.get(user=user)
 
+        # Obtenemos los seguidores del usuario
+        followers = profile.followers.all()
+
+
+        # Si el numero de seguidores igual a 0
+        if len(followers) == 0:
+
+            # Pasamos False a la variable is_following
+            is_following = False
+
+
+        # Si estamos siguiendo a un usuario y estamos en la lista de seguidores
+        for follower in followers:
+
+            # Si el usuario logueado esta en la lista de seguidores
+            if follower == request.user:
+
+                # Pasamos True a la variable is_following
+                is_following = True
+                # Rompemos el ciclo
+                break
+
+            # Si el usuario logueado no esta en la lista de seguidores
+            else:
+
+                # Pasamos False a la variable is_following
+                is_following = False
+
+
+        # Hacemos un conteo de los seguidores del usuario
+        # Usamos len() para contar los seguidores del usuario
+        # Len es una funcion que nos permite contar los elementos de una lista
+        number_of_followers = len(followers)
+
+
+        # Cargamos el template del perfil del usuario
+        template = loader.get_template('users/detail.html')
+
+
         # Obtenemos el contexto
         context ={
-            
-            # Obtenemos el usuario logueado
-            'user':user,
 
             # Obtenemos el perfil del usuario
-            'profile':profile
+            'profile':profile,
+
+            # Obtenemos el numero de seguidores del usuario
+            'number_of_followers':number_of_followers,
+
+            # Obtenemos si estamos siguiendo al usuario
+            'is_following':is_following,
             }   
         
 
-        # Retornamo y renderizamos el perfil del usuario
-        return render(request, 'users/detail.html', context)
+        # Retornamo 
+        return HttpResponse(template.render(context, request))
     
+
 
 
 # Creamos una vista para editar el perfil del usuario
@@ -72,7 +124,7 @@ def EditProfile(request):
     profile = Profile.objects.get(user__id=user)
 
     # Obtenemos la informacion del usuario logueado
-    user__info = User.objects.get(id=user) 
+    user_basic_info = User.objects.get(id=user) 
 
 
     # Definimos el formulario para editar el perfil
@@ -89,8 +141,8 @@ def EditProfile(request):
 
             # Hacemos referencia a user__info para poder editar los campos del usuario
             # Cleaned_data: Es un diccionario que contiene los datos validos del formulario
-            user__info.first_name = form.cleaned_data.get('first_name')
-            user__info.last_name = form.cleaned_data.get('last_name')
+            user_basic_info = form.cleaned_data.get('first_name')
+            user_basic_info.last_name = form.cleaned_data.get('last_name')
 
 
             # Pasaremos a editar el perfil del usuario
@@ -117,10 +169,10 @@ def EditProfile(request):
 
             # Guardamos los cambios
             # Guardamos los cambios del usuario
-            user__info.save()
+            user_basic_info.save()
 
             # Redireccionamos al perfil del usuario
-            return redirect('users:profile', request.user.username)
+            return redirect('users:profile', username = request.user.username)
         
     # Si el metodo es GET
     else:
@@ -138,3 +190,85 @@ def EditProfile(request):
 
     # Retornamos y renderizamos el formulario para editar el perfil
     return render(request, 'users/edit.html', context)
+
+
+
+
+# Creamos una vista para seguir a un usuario o dejar de seguirlo
+class AddFollower(LoginRequiredMixin, View):
+
+    # Definimos post para poder seguir a un usuario o dejar de seguirlo
+    def post(self, request, pk, *args, **kwargs):
+
+        # Obtenemos el perfil al que se va a seguir o dejar de seguir
+        profile = Profile.objects.get(pk=pk)
+
+        # Obtenemos el usuario que va a seguir o dejar de seguir
+        # Add nos permite agregar un objeto a una relacion muchos a muchos
+        profile.followers.add(request.user)
+
+        # Mostrar mensaje de exito en el html
+        messages.add_message(
+            self.request, 
+            messages.SUCCESS, 
+            'Siguiendo a {}'.format(profile.user.username
+            ))
+       
+        # Redireccionamos al perfil del usuario
+        return redirect('users:profile', username = request.user.username)
+    
+
+
+
+# Creamos una vista para dejar de seguir a un usuario
+class RemoveFollower(LoginRequiredMixin, View):
+
+    # Definimos post para poder dejar de seguir a un usuario
+    def post(self, request, pk, *args, **kwargs):
+
+        # Obtenemos el perfil al que se va a dejar de seguir
+        profile = Profile.objects.get(pk=pk)
+
+        # Obtenemos el usuario que va a dejar de seguir
+        # Remove nos permite eliminar un objeto de una relacion muchos a muchos
+        profile.followers.remove(request.user)
+
+        # Mostrar mensaje de exito en el html
+        messages.add_message(
+            self.request, 
+            messages.SUCCESS, 
+            'Dejaste de seguir a {}'.format(profile.user.username
+            ))
+       
+        # Redireccionamos al perfil del usuario
+        return redirect('users:profile', username = request.user.username)
+    
+
+
+
+# Creamos una vista para mostrar los seguidores de un usuario
+class ListFollowers(View):
+
+    # Definimos get para poder mostrar los seguidores de un usuario
+    def get(self, request, pk, *args, **kwargs):
+
+        # Obtenemos el perfil del usuario
+        profile = Profile.objects.get(pk=pk)
+
+        # Obtenemos los seguidores del usuario
+        # All nos permite obtener todos los objetos de una relacion muchos a muchos
+        followers = profile.followers.all()
+
+
+        # Obtenemos el contexto
+        context = {
+
+            # Obtenemos el perfil del usuario
+            'profile':profile,
+
+            # Obtenemos los seguidores del usuario
+            'followers':followers
+        }
+
+        # Retornamos y renderizamos los seguidores del usuario
+        return render(request, 'pages/social/followers_list.html', context)

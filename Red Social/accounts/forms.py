@@ -1,7 +1,7 @@
 # Usaremos este documento para la poder editar los campos del perfil
 # Importamos profile para poder editar los campos del perfil
 from accounts.models import Profile
-
+ 
 # Importamos forms para poder crear un formulario
 from django import forms
 
@@ -108,7 +108,7 @@ class EditProfileForm(forms.ModelForm):
 
         # Definimos los campos que queremos editar
         # fields es una lista de los campos que queremos editar del perfil
-        fields = [
+        fields = (
 
             # Primer nombre
             'first_name', 
@@ -133,4 +133,4 @@ class EditProfileForm(forms.ModelForm):
 
             # Fecha de nacimiento del usuario
             'birthday'
-            ]
+            )
