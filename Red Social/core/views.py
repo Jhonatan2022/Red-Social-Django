@@ -40,8 +40,14 @@ class HomeView(LoginRequiredMixin, View):
         logged_in_user = request.user
 
 
-        # Obtenemos todos los posts de la base de datos
-        posts = SocialPost.objects.all()
+        # # Obtenemos todos los posts de la base de datos
+        # posts = SocialPost.objects.all()
+
+        # Obtenemos los post de los usuarios que sigue el usuario que esta logueado
+        # Usamos __ en vez de . para acceder a los campos de los modelos relacionados
+        # Usamos order_by para ordenar los posts por fecha de creacion
+        # Usamos -created_on para ordenar los posts de mas reciente a mas antiguo
+        posts = SocialPost.objects.filter(author__profile__followers__in=[logged_in_user.id]).order_by('-created_on')
 
         # Definimos el formulario para crear posts
         form = SocialPostForm()
@@ -71,7 +77,15 @@ class HomeView(LoginRequiredMixin, View):
 
 
         # Obtenemos todos los posts de la base de datos
-        posts = SocialPost.objects.all()
+        # posts = SocialPost.objects.all()
+
+        # Obtenemos los post de los usuarios que sigue el usuario que esta logueado
+        # Usamos __ en vez de . para acceder a los campos de los modelos relacionados
+        # Usamos order_by para ordenar los posts por fecha de creacion
+        # Usamos -created_on para ordenar los posts de mas reciente a mas antiguo
+        posts = SocialPost.objects.filter(
+                author__profile__followers__in=[logged_in_user.id]
+            ).order_by('-created_on')
 
 
         # Definimos el formulario para crear posts
