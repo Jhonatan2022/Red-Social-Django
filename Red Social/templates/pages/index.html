@@ -14,7 +14,7 @@
 
 <!-- POST FORM -->
 {% if user.is_authenticated %}
-<div x-data="{ open: false }" class="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
+<div x-data="{ open: false }" class=" px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
 
     <div class="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
         <a href="{% url 'users:profile' username=user.username %}">
