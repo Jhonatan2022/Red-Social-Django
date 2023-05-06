@@ -1,21 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tailwind_tags %} 
+{% load tailwind_filters %}
 {% load humanize %}
-<!-------------------------------------------------------------------------->
-{% block navbar %}
-{% include 'components/navbar.html' %}
-{% endblock navbar %}
-<!-------------------------------------------------------------------------->
-{% block left_sidebar %}
-{% include 'components/left/sidebar.html' %}
-{% endblock left_sidebar %}
-<!-------------------------------------------------------------------------->
+{% block title %}Homepage{% endblock title %}
+{% block extra_head %}{% endblock extra_head %}
+<!-- NAVBAR -->
+{% block navbar %} {% include 'components/navbar.html' %} {% endblock navbar %}
+<!-- left sidebar -->
+{% block left_sidebar %} {% include 'components/left/sidebar.html' %} {% endblock left_sidebar %}
+<!-- main content -->
 {% block content %}
 
 <!-- POST FORM -->
 {% if user.is_authenticated %}
-<div x-data="{ open: false }" class=" px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
-
+<div x-data="{ open: false }" class="px-4 mt-4 shadow rounded-lg bg-white dark:bg-dark-second">
     <div class="p-2 border-b border-gray-300 dark:border-dark-third flex space-x-4">
         <a href="{% url 'users:profile' username=user.username %}">
         <img src="{{user.profile.picture.url}}" alt="Profile picture" class="w-10 h-10 rounded-full">
@@ -26,17 +25,13 @@
             </span>
         </button>
     </div>
-
     <!--POST MODAL-->
     <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click.away="open = false" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        
         <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-description="Background overlay, show/hide based on modal state." class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="open = false" aria-hidden="true"></div>
-
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-        <div class="inline-block align-bottom dark:bg-dark-second bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-            
+        <div class="inline-block align-bottom dark:bg-dark-second bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">            
             <div>
                 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full dark:bg-dark-third bg-green-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:text-dark-txt text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +49,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-3">
                 <div class="mt-5 sm:mt-6 ">
                     {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
@@ -62,11 +56,8 @@
                     </label> {% endcomment %}
                     <form method="POST" enctype="multipart/form-data" class="inline-flex flex-col">
                         {% csrf_token %}
-
                         <div class="mb-2">{{form.image}}</div> 
-
                         {{form.body}}
-
                         <div class="block">
                             <button type="submit" class="inline-flex items-center float-right mt-1 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Post
@@ -80,7 +71,6 @@
         </div>
     </div>
     <!-- END POST MODAL -->
-
     <div class="p-2 flex">        
         <a href="#" class="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl sm:text-3xl py-2 rounded-lg cursor-pointer text-blue-500">
             <i class='bx bxs-inbox'></i>
@@ -144,7 +134,7 @@
                     </svg>
                     </button>
                 </div>
-                
+    
                 <div x-show="open" x-transition:enter="ease-out duration-300" 
                       x-transition:enter-start="opacity-0" 
                       x-transition:enter-end="opacity-100" 
@@ -161,10 +151,8 @@
                     </a>
                     </div>
                 </div>
-                
             </div>
             {% endif %}
-            
         </div>
         <!-- END POST AUTHOR -->
 
@@ -179,7 +167,6 @@
 
         {% if post.shared_user %}
             <!-- This example requires Tailwind CSS v2.0+ -->
-            
             <div class="bg-white dark:bg-dark-third overflow-hidden shadow rounded-lg ">
                 <div class="px-4 py-5 sm:p-6">
                     <div class="flex space-x-2 items-center">
@@ -217,7 +204,6 @@
                         {% endfor %}
                     </div>
                     {% endif %}
-                    
                     <!-- END POST IMAGE -->
 
                     <!-- POST MULTIPLE IMAGE -->
@@ -228,21 +214,19 @@
                             <a href="{% url 'social:post-detail' pk=post.pk %}">
                             <img src="{{ img.image.url }}" alt="Post image">
                             </a>
-                        {% endfor %}
-                            
+                        {% endfor %}          
                         </div>
                     </div>
                     {% endif %}
                     <!-- END POST IMAGE -->
                 </div>
-            </div>      
+            </div>
         {% else %}
             <!-- POST CONTENT -->
             <div class="body text-justify px-4 py-2">
                 {{post.body}}
             </div>
             <!-- END POST CONTENT -->
-
             <!-- POST IMAGE -->
             {% if post.image.count == 1 %}
             <div class="py-2">
@@ -252,16 +236,13 @@
             </div>
             {% endif %}
             <!-- END POST IMAGE -->
-            
             <!-- POST MULTIPLE IMAGE -->
             {% if post.image.count > 1 %}
             <div class="py-2">
-                <div class="grid grid-cols-3 gap-1">
+                <div class="grid grid-cols-2 gap-1">
                 {% for img in post.image.all %}
                     <img src="{{ img.image.url }}" alt="Post image">
-                    
                 {% endfor %}
-                    
                 </div>
             </div>
             {% endif %}
@@ -279,12 +260,10 @@
                             <span class="text-sm font-semibold">View</span>
                         </a>
                         <div class="flex flex-row-reverse items-center cursor-default">
-                        
                             <span class="text-xs ml-2 text-gray-500 dark:text-dark-txt">{{post.likes.all.count}} Likes</span>
                             <div class="rounded-full grid place-items-center text-xl -ml-1 text-blue-500">
                                 <i class='bx bxs-like'></i>
                             </div>
-                            
                         </div>
                         <div class="flex flex-row-reverse items-center cursor-default">
                             
@@ -292,24 +271,19 @@
                             <div class="rounded-full grid place-items-center text-xl -ml-1 text-red-500">
                                 <i class='bx bxs-dislike'></i>
                             </div>
-                            
                         </div>
                         
                         <div @click="open = true" class="w-1/3 flex space-x-2 justify-center items-center hover:bg-gray-100 dark:hover:bg-dark-third text-xl py-2 rounded-lg cursor-pointer text-gray-500 dark:text-dark-txt">
                             <i class='bx bx-share'></i>
                             <span class="text-sm font-semibold">Share</span>
                         </div>
-                        <!-- MODAL-->
+                        
                         <!-- MODAL-->
                         <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click.away="open = false" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            
                             <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-description="Background overlay, show/hide based on modal state." class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="open = false" aria-hidden="true"></div>
-
                             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
                             <div class="inline-block align-bottom dark:bg-dark-second bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-                                
                                 <div>
                                     <div class="mt-3 text-center sm:mt-5">
                                         <h3 class="text-lg leading-6 font-medium dark:text-dark-txt text-gray-900" id="modal-title">
@@ -328,9 +302,9 @@
                                         {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
                                             Body
                                         </label> {% endcomment %}
-                                        {% comment %} <form method="POST" class="flex-auto" action="{% url 'social:share-post' post.pk %}" id="{{post.pk}}">
+                                        <form method="POST" class="flex-auto" action="{% url 'social:share-post' post.pk %}" id="{{post.pk}}">
                                             {% csrf_token %}
-                                            {{share_form|crispy}} {% endcomment %}
+                                            {{share_form|crispy}}
                                             <div class="block">
                                                 <button type="submit" class="inline-flex items-center ml-1 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 Post
@@ -355,9 +329,6 @@
 </div>
 <!-- END LIST POST -->
 {% endblock content %}
-<!-------------------------------------------------------------------------->
 {% block right_sidebar %} {% endblock right_sidebar %}
-<!-------------------------------------------------------------------------->
 {% block footer %} {% endblock footer %}
-<!-------------------------------------------------------------------------->
 {% block javascript %}{% endblock javascript %}

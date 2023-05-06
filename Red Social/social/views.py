@@ -1,5 +1,5 @@
 # Importamos SocialCommentForm para poder crear los comentarios
-from social.forms import SocialCommentForm
+from social.forms import SocialCommentForm, ShareForm
 
 # Importamos LoginRequiredMixin para que solo los usuarios logueados puedan acceder a las vistas
 # Importamos UserPassesTestMixin para que solo los usuarios que hayan creado el post puedan editarlos
@@ -24,6 +24,9 @@ from django.views.generic.edit import UpdateView, DeleteView
 
 # Importamos httprresponse para poder redireccionar a una url
 from django.http.response import HttpResponseRedirect, HttpResponse
+
+# Importamos timezone para poder usar la zona horaria
+from django.utils import timezone
 #------------------------------IMPORT MODELS-----------------------------
 
 
@@ -118,6 +121,62 @@ class PostDetailView(LoginRequiredMixin, View):
         # Retornamos la plantilla de detalle de los posts
         return render(request, 'pages/social/detail.html', context)
 
+
+
+
+# Creamos la vista para poder compartir posts
+class SharePostView(View):
+
+    # Utilizamos post para poder acceder a los posts mediante la url
+    # Jalamos el pk para poder acceder a los posts mediante la url
+    def post(self, request, pk, *args, **kwargs):
+
+        # Cargamos el post original que queremos compartir
+        # Usamos pk para poder acceder a los posts mediante la url
+        original_post = SocialPost.objects.get(pk=pk)
+
+        # Definimos el formulario para poder compartir posts
+        form = ShareForm(request.POST)
+
+        # Validamos el formulario
+        if form.is_valid():
+
+            # Guardamos el post pero no lo subimos a la base de datos
+            new_post = SocialPost(
+                
+                # # Obtenemos el nuevo cuerpo del post
+                shared_body = self.request.POST.get('body'),
+
+                # # Obtenemos el cuerpo del post original
+                body = original_post.body,
+
+                # # Obtenemos el autor del post original
+                author = original_post.author,
+
+                # # Obtenemos la fecha de creacion del post original
+                created_on = original_post.created_on,
+
+                # # Obtenemos le usuario que compartio el post
+                shared_user = self.request.user,
+
+                # # Obtenemos la fecha de comparticion del post
+                shared_on=timezone.now(),
+                )
+
+            # Subimos el post a la base de datos
+            new_post.save()
+
+            # Recorremos la imagenes que se esta subiendo
+            for img in original_post.image.all():
+
+                # Guardamos la imagen pero no la subimos a la base de datos
+                new_post.image.add(img)
+
+            # Guardamos el post en la base de datos
+            new_post.save()
+
+        # Redireccionamos a la url de home
+        return redirect('home')
 
 
 

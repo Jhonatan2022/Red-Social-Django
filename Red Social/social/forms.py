@@ -85,3 +85,23 @@ class SocialCommentForm(forms.ModelForm):
 
         # fields nos permite definir los campos del formulario que vamos a editar
         fields = ['comment']
+
+
+
+
+# Creamos un formilario para poder compartir posts
+class ShareForm(forms.Form):
+
+    # Definimos el cuerpo del post como un campo de texto
+    body = forms.CharField(
+        label='',
+
+        # Usamos widget=forms.Textarea para que el cuerpo del post sea un campo de texto largo
+        widget=forms.Textarea(attrs={
+
+            # Definimos el estilo del campo de texto
+            'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-dark-third dark:border-dark-third dark:text-dark-txt flex max-w-full sm:text-sm border-gray-300 rounded-md',
+            'rows': '3',
+            'placeholder': 'Say Something...'
+            }),
+        )
