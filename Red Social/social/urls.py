@@ -11,7 +11,8 @@ from .views import (
     
     # PostEditView: Vista de editar los posts
     # PostDeleteView: Vista de eliminar los posts
-    PostEditView, PostDeleteView, 
+    # SharePostView: Vista de compartir los posts
+    PostEditView, PostDeleteView, SharePostView, 
 
     # AddLike: Vista de agregar likes 
     # AddDislike: Vista de agregar dislikes
@@ -58,6 +59,10 @@ urlpatterns = [
 
     # Declaramos la url de agregar dislikes y le pasamos el pk para poder acceder a los posts mediante la url
     path('post/<int:pk>/dislike', AddDislike.as_view(), name='dislike'),
+
+
+    # Declaramos la url de compartir los posts y le pasamos el pk para poder acceder a los posts mediante la url
+    path('post/<int:pk>/share', SharePostView.as_view(), name='share-post'),
 
 
     # Declaramos la url de eliminar comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url

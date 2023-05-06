@@ -19,7 +19,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Importamos el formulario para crear posts y comentarios
-from social.forms import SocialPostForm
+from social.forms import SocialPostForm, ShareForm
 #--------------------------IMPORTS---------------------------------#
 
 
@@ -51,6 +51,9 @@ class HomeView(LoginRequiredMixin, View):
 
         # Definimos el formulario para crear posts
         form = SocialPostForm()
+
+        # Definimos el formulario para compartir posts
+        share_form = ShareForm()
         
         # Creamos el contexto para la pagina principal
         # Contexto es un diccionario que contiene los datos que se van a pasar a la pagina html
@@ -61,6 +64,9 @@ class HomeView(LoginRequiredMixin, View):
 
             # Definimos los posts
             'posts': posts,
+
+            # Definimos el formulario para compartir posts
+            'share_form': share_form,
         }
 
         # Retornamos la pagina principal
@@ -94,6 +100,9 @@ class HomeView(LoginRequiredMixin, View):
 
         # Definimos las imagenes que nos llegan por post
         files = request.FILES.getlist('image')
+
+        # Definimos el formulario para compartir posts request.POST
+        share_form = ShareForm()
 
 
         # Comprobamos si el formulario es valido
@@ -133,6 +142,9 @@ class HomeView(LoginRequiredMixin, View):
 
             # Definimos los posts
             'posts': posts,
+
+            # Definimos el formulario para compartir posts
+            'share_form': share_form,
         }
 
         # Retornamos la pagina principal

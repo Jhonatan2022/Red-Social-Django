@@ -34,6 +34,27 @@ def dm_directory_path(instance, filename):
 # Definimos el modelo de los posts
 class SocialPost(models.Model):
 
+
+    # Definimos el campo para poder compartir el post
+    # TextField para que el campo pueda ser largo
+    shared_body = models.TextField(blank=True, null=True)
+
+
+    # Definimos el campo para poder compartir el post y le pasamos el foreign key del post que esta compartiendo
+    # ForeignKey para que un post solo pueda tener un post compartido y un post compartido pueda tener varios posts
+    # on_delete=models.CASCADE para que si se elimina el post se eliminen sus compartidos
+    # null=True para que no sea obligatorio compartir un post
+    # blank=True para que no sea obligatorio compartir un post
+    # related_name='+' para que no se pueda acceder a los posts compartidos de un post
+    shared_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name='+')
+
+
+    # Definimos el campor de fecha en que se compartio el post
+    # null=True para que no sea obligatorio compartir un post
+    # blank=True para que no sea obligatorio compartir un post
+    shared_on = models.DateTimeField(null=True, blank=True)
+
+
     # Definimos el cuerpo del post
     body = models.TextField()
 
