@@ -24,11 +24,14 @@ def user_directory_path(instance, filename):
 
 
 
+
 # Definimos en donde se subiran los mensajes del post
 def dm_directory_path(instance, filename):
 
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'user/messages/{0}'.format(filename)
+
+
 
 
 # Definimos el modelo de los posts
@@ -174,6 +177,7 @@ class SocialComment(models.Model):
         
         # Retornamos False si el comentario tiene un comentario padre
         return False
+
 
 
 

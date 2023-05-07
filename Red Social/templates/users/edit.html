@@ -1,18 +1,9 @@
 {% extends 'base.html' %}
-
 {% load static %}
-
 {% load tailwind_filters %}
-
 {% block title %}{{user.username}} Edit Profile{% endblock title %}
-
-{% block navbar %}
-{% include 'components/navbar.html' %}
-{% endblock navbar %}
-
-{% block left_sidebar %}
-{% comment %} {% include 'components/sidebars/left/users/sidebar.html' %} {% endcomment %}
-{% endblock left_sidebar %}
+{% block navbar %} {% include 'components/navbar.html' %} {% endblock navbar %}
+{% block left_sidebar %} {% endblock left_sidebar %}
 
 {% block content %}
 <form class="form-horizontal dark:text-dark-txt" method="post"  enctype="multipart/form-data">
@@ -24,7 +15,6 @@
         {{form.banner}}
         <div class="space-y-1 text-center">
           <div class="flex text-sm text-gray-600">
-            
           </div>
         </div>
       </div>
@@ -84,7 +74,6 @@
             Update</button>
             </div>
         </div>
-
     </div>
 </form>
 {% endblock content %}

@@ -51,9 +51,6 @@
             </div>
             <div class="grid grid-cols-3">
                 <div class="mt-5 sm:mt-6 ">
-                    {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
-                        Body
-                    </label> {% endcomment %}
                     <form method="POST" enctype="multipart/form-data" class="inline-flex flex-col">
                         {% csrf_token %}
                         <div class="mb-2">{{form.image}}</div> 
@@ -299,9 +296,6 @@
 
                                 <div class="grid grid-cols-3">
                                     <div class="mt-5 sm:mt-6 ">
-                                        {% comment %} <label class="block text-sm font-medium dark:text-dark-txt text-gray-700">
-                                            Body
-                                        </label> {% endcomment %}
                                         <form method="POST" class="flex-auto" action="{% url 'social:share-post' post.pk %}" id="{{post.pk}}">
                                             {% csrf_token %}
                                             {{share_form|crispy}}

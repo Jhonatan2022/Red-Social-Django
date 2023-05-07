@@ -30,6 +30,9 @@ from django.utils import timezone
 
 # Importamos Q para poder hacer consultas complejas en la base de datos
 from django.db.models import Q
+
+# Importamos profile para poder acceder a los perfiles
+from accounts.models import Profile
 #------------------------------IMPORT MODELS-----------------------------
 
 
@@ -650,25 +653,19 @@ class UserSearch(View):
     # Utilizamos get para poder buscar usuarios
     def get(self, request, *args, **kwargs):
 
-        # Obtenemos el dato que se va a buscar
-        query = request.GET.get('q')
+        # Obtenemos el dato que se va a buscar por medio de GET
+        query = request.GET.get('query')
 
-        # Si el dato es vacio, entonces retornamos a la url de inicio
-        if query == None:
+        # Obtenemos la lista de perfiles por medio de la query que se va a buscar
+        profile_list = Profile.objects.filter(Q(user__username__icontains=query))
+            
+        # Creamos un contexto para poder pasarle los usuarios
+        context = {
 
-            # Retornamos a la url de inicio
-            return redirect('social:home')
-
-        # Si el dato no es vacio, entonces buscamos el usuario
-        else:
-
-            # Buscamos el usuario
-            users = User.objects.filter(username__icontains=query)
-
-            # Creamos un contexto para poder pasarle los usuarios
-            context = {
-                'users': users,
+                # Pasamos la lista de usuarios
+                'profile_list': profile_list
             }
 
-            # Retornamos la pagina de buscar usuarios
-            return render(request, 'pages/social/search.html', context)
+        # Retornamos la pagina de buscar usuarios
+        return render(request, 'pages/social/search.html', context)
+    

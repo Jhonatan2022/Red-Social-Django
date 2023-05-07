@@ -6,7 +6,17 @@
 from django.urls import path
 
 # Importamos las vistas de la aplicación
-from .views import UserProfileView, EditProfile, AddFollower, RemoveFollower, ListFollowers
+from .views import (
+
+    # UserProfileView: Vista para el perfil del usuario
+    # EditProfile: Vista para editar el perfil del usuario
+    UserProfileView, EditProfile, 
+    
+    
+    # AddFollower: Vista para seguir a un usuario
+    # RemoveFollower: Vista para dejar de seguir a un usuario
+    # ListFollowers: Vista para mostrar los seguidores de un usuario
+    AddFollower, RemoveFollower, ListFollowers)
 #------------------------------IMPORT BOOKSTORES--------------------------
 
 

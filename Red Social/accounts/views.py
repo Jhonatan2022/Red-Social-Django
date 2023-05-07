@@ -272,3 +272,4 @@ class ListFollowers(View):
 
         # Retornamos y renderizamos los seguidores del usuario
         return render(request, 'pages/social/followers_list.html', context)
+    
