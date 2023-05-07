@@ -27,6 +27,9 @@ from django.http.response import HttpResponseRedirect, HttpResponse
 
 # Importamos timezone para poder usar la zona horaria
 from django.utils import timezone
+
+# Importamos Q para poder hacer consultas complejas en la base de datos
+from django.db.models import Q
 #------------------------------IMPORT MODELS-----------------------------
 
 
@@ -637,3 +640,35 @@ class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         # Retornamos si el usuario logueado es el autor del post
         return self.request.user == post.author
+
+
+
+
+# Creamos una vista para poder buscar usuarios
+class UserSearch(View):
+
+    # Utilizamos get para poder buscar usuarios
+    def get(self, request, *args, **kwargs):
+
+        # Obtenemos el dato que se va a buscar
+        query = request.GET.get('q')
+
+        # Si el dato es vacio, entonces retornamos a la url de inicio
+        if query == None:
+
+            # Retornamos a la url de inicio
+            return redirect('social:home')
+
+        # Si el dato no es vacio, entonces buscamos el usuario
+        else:
+
+            # Buscamos el usuario
+            users = User.objects.filter(username__icontains=query)
+
+            # Creamos un contexto para poder pasarle los usuarios
+            context = {
+                'users': users,
+            }
+
+            # Retornamos la pagina de buscar usuarios
+            return render(request, 'pages/social/search.html', context)
