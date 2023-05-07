@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tailwind_tags %}
+{% load tailwind_filters %}
+
+{% block title %}{{user.username}}Search Warriors{% endblock title %}
+{% block extra_head %}{% endblock extra_head %}
+
+<!-- NAVBAR -->
+{% block navbar %}
+{% include 'components/navbar.html' %}
+{% endblock navbar %}
+
+<!-- MAIN -->
+<!-- left sidebar -->
+{% block left_sidebar %}
+{% include 'components/left/sidebar.html' %}
+{% endblock left_sidebar %}
+
+{% block content %}
+
+<div class="bg-white max-w-full dark:bg-dark-second shadow px-4 py-5 sm:rounded-lg sm:p-6">
+    <div class="bg-white dark: bg-dark-tird max-w-full px-4 py-5 border-b rounded-lg mb-2 dark:border-dark-second border-gray-200 sm:px-6">
+        <h3 class="text-xl leading-6 cursor-default dark:text-dark-txt prose rounded font-bold text-gray-900"></h3>
+    </div>
+</div>

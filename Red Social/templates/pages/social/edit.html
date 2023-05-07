@@ -2,7 +2,6 @@
 {% load static %}
 {% load tailwind_tags %}
 {% load tailwind_filters %}
-
 {% block title %}{{user.username}}New Post for Fans{% endblock title %}
 {% block extra_head %}{% endblock extra_head %}
 
@@ -11,7 +10,6 @@
 {% include 'components/navbar.html' %}
 {% endblock navbar %}
 
-<!-- MAIN -->
 <!-- left sidebar -->
 {% block left_sidebar %}
 {% include 'components/left/sidebar.html' %}
@@ -31,7 +29,6 @@
           <div class="mt-5 md:mt-0 md:col-span-2">
               <form  method="POST" class="space-y-8" enctype="multipart/form-data">
                 {% csrf_token %}
-
                   <div class="space-y-8  sm:space-y-5">
                       {% for hidden_field in form.hidden_fields %}
                       {{hidden_field.errors}}
@@ -60,12 +57,8 @@
       </div>
     </div>
 {% endblock content %}
-
 <!-- right content -->
-{% block right_sidebar %}
-{% endblock right_sidebar %}
-
+{% block right_sidebar %}{% endblock right_sidebar %}
 <!-- FOOTER -->
-{% block footer %}
-{% endblock footer %}
+{% block footer %}{% endblock footer %}
 {% block javascript %}{% endblock javascript %}
