@@ -21,6 +21,37 @@
 
 <div class="bg-white max-w-full dark:bg-dark-second shadow px-4 py-5 sm:rounded-lg sm:p-6">
     <div class="bg-white dark: bg-dark-tird max-w-full px-4 py-5 border-b rounded-lg mb-2 dark:border-dark-second border-gray-200 sm:px-6">
-        <h3 class="text-xl leading-6 cursor-default dark:text-dark-txt prose rounded font-bold text-gray-900"></h3>
+        <h3 class="text-xl leading-6 cursor-default dark:text-dark-txt prose rounded font-bold text-gray-900">Search Results</h3>
+        <p class="mt-1 text-sm cursor-default dark:text-dark text-gray-500">
+            There all search results from your query.
+        </p>
     </div>
+<ul class="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" >
+    {% for profile in profile_list %}
+    <li class="col-span-1 flex flex-col text-center dark:bg-dark-main bg-white rounded-full">
+        <div class="flex-1 flex flex-col p-8">
+            {% if profile.picture %}
+            <img class="w-32 h-32 flex-shrink-0 mx-auto dark:bg-dark-second bg-white rounded-full" src="{{ profile.picture.url }}" alt="">
+            {% else %}
+            <img class="w-32 h-32 flex-shrink-0 mx-auto dark:bg-dark-second bg-white rounded-full" src="{% static 'img/default_profile.png' %}" alt="">
+            {% endif %}
+            <h3 class="mt-6 dark:text-dark-txt text-gray-900 cursor-default text-lg font-bold prose">{{ profile.user.username }}</h3>
+        </div>
+        <div>
+            <div class="-mt-px flex divide-x dark:divide-dark-second divide-gray-200">
+                <div class="w-0 flex-1 flex">
+                    <a href="{% url 'users:profile' username=profile.user.username %}" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 dark:text-dark-txt font-bold leading-5 cursor-pointer hover:text-gray-500 dark:hover:text-dark-txt focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:focus:ring-dark-main dark:focus:border-dark-main">
+                        <span class="ml-3">Profile</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
 </div>
+{% endblock content %}
+<!-- RIGHT SIDEBAR -->
+{% block right_sidebar %}{% endblock right_sidebar %}
+<!-- FOOTER -->
+{% block footer %}{% endblock footer %}

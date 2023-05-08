@@ -14,5 +14,8 @@ from .models import User, Profile
 admin.site.register(User)
 
 
+
+
 # Usamos register para registrar el modelo Profile en el panel de administración
 admin.site.register(Profile)
+

@@ -1,6 +1,5 @@
 {% load static %}
 <nav class="bg-white dark:bg-dark-second h-max md:h-14 w-full shadow flex flex-col md:flex-row items-center justify-center md:justify-between fixed top-0 z-50 border-b dark:border-dark-third">
-
     <!-- LEFT NAV -->
     <div class="flex items-center justify-between w-full md:w-max px-4 py-2">
         <a href="{% url 'home' %}" class="mr-2 hidden md:inline-block">
@@ -9,16 +8,12 @@
         <a href="{% url 'home' %}" class="inline-block md:hidden">
             <img src="{% static 'img/logo3.png' %}" alt="" class="w-10 h-10">
         </a>
-
         <div class="flex items-center justify-between space-x-1">
             {% if not user.is_authenticated %}
-        
             <a href="{% url 'account_login' %}" class="inline-flex items-center md:hidden justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
-                
                 <span class="mx-2 font-semibold dark:text-dark-txt">Login</span>
             </a>
             <a href="{% url 'account_signup' %}" class="inline-flex items-center md:hidden justify-center p-1 rounded-full hover:text-white  hover:bg-blue-300 dark:hover:bg-dark-third mx-1">
-                
                 <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
             </a>
             {% else %}
@@ -30,11 +25,11 @@
                 </svg>
                 <span class="mx-2 font-semibold dark:text-dark-txt">{{user.profile.coins}}</span>
             </a>
+            <form method="GET" action="{% url 'social:profile-search' %}" class="mt-4 relative bg-gray-100 dark:bg-dark-third px-2 py-2 w-10 h-10 sm:w-11 sm:h-11 lg:h-10 lg:w-10 xl:w-max xl:pl-3 xl:pr-8 rounded-full flex items-center justify-center cursor-pointer">
 
-            <div class="relative bg-gray-100 dark:bg-dark-third px-2 py-2 w-10 h-10 sm:w-11 sm:h-11 lg:h-10 lg:w-10 xl:w-max xl:pl-3 xl:pr-8 rounded-full flex items-center justify-center cursor-pointer">
-                <i class='bx bx-search-alt-2 text-xl xl:mr-2 dark:text-dark-txt'></i>
-                <input type="text" placeholder="Search In Warhammer" class="outline-none border-none bg-transparent hidden xl:inline-block">
-            </div>
+                <button type="submit" class='bx bx-search-alt-2 text-xl xl:mr-2 dark:text-dark-txt'></button>
+                <input name="query" value="{{ request.GET.query }}" type="text" placeholder="Search In Warhammer" class="outline-none border-none bg-transparent hidden xl:inline-block">
+            </form>
 
             <div class="text-xl grid place-items-center md:hidden bg-gray-200 dark:bg-dark-third rounded-full w-10 h-10 cursor-pointer hover:bg-gray-300 dark:text-dark-txt" id="dark-mode-toggle-mb">
                 <i class='bx bxs-bell'></i>
@@ -54,7 +49,6 @@
         <li class="w-1/5 md:w-max text-center">
             <a href="#" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
                 <i class='bx bx-movie-play'></i>
-                {% comment %} <span class="text-xs absolute top-0 right-1/4 bg-red-500 text-white font-semibold rounded-full px-1 text-center">9+</span> {% endcomment %}
             </a>
         </li>
         <li class="w-1/5 md:w-max text-center">
@@ -82,11 +76,8 @@
         <div @keydown.window.escape="open = false" x-show="open" aria-labelledby="slide-over-title" x-ref="dialog" aria-modal="true" 
                 class="fixed z-10 inset-0 overflow-auto xl:hidden ">
             <div class="absolute inset-0 overflow-hidden">
-                
                 <div x-description="Background overlay, show/hide based on slide-over state." class="absolute inset-0" @click="open = false" aria-hidden="true"></div>
-
                 <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex ">
-                
                     <div x-show="open" @click.away="open = false"  class="w-screen max-w-md" x-description="Slide-over panel, show/hide based on slide-over state.">
                         <div class="h-full flex flex-col py-6 bg-white dark:bg-dark-second shadow-xl overflow-y-scroll scrollbar-hide">
                             <div class="px-4 sm:px-6">
@@ -107,10 +98,8 @@
 
                             <div class="mt-6 relative flex-1 px-4 sm:px-6">
                                 <!-- Replace with your content -->
-                                
                                 <!--Menu Items-->
                                 {% include 'components/left/items.html' %}
-                               
                                 {% include 'components/footer.html' %}  
                                 <!-- /End replace -->
                             </div>
@@ -125,17 +114,13 @@
     <!-- RIGHT NAV -->
     <ul class="hidden md:flex mx-4 items-center justify-center">
         {% if not user.is_authenticated %}
-        
             <a href="{% url 'account_login' %}" class="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
-                
                 <span class="mx-2 font-semibold dark:text-dark-txt">Login</span>
             </a>
-            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center p-1 rounded-full hover:text-white  hover:bg-blue-600 dark:hover:bg-dark-third mx-1">
-                
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center p-1 rounded-full hover:text-white  hover:bg-blue-600 dark:hover:bg-dark-third mx-1"> 
                 <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
             </a>
         {% else %}
-
         <li class="h-full xl:flex">
             <a href="#" class="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
                 <i class='bx bx-coin text-yellow-400'></i>
@@ -145,14 +130,12 @@
                 <span class="mx-2 font-semibold dark:text-dark-txt">{{user.profile.coins}}</span>
             </a>
         </li>
-
         <li>
             <div x-data="{open:false}">
             <div @click="open=true" class="text-xl grid place-items-center dark:bg-dark-second bg-gray-200 dark:bg-dark-third dark:text-dark-txt rounded-full mx-1 p-3 cursor-pointer hover:bg-gray-300 relative">
                 <i class='bx bxs-bell'></i>
                 <span class="text-xs absolute top-0 right-0 bg-red-500 text-white font-semibold rounded-full px-1 text-center">9</span>
             </div>
-
                 <div x-show="open" @click.away="open=false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg dark:bg-dark-second bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                     <div class="py-1" role="none">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->

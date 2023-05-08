@@ -5,14 +5,15 @@ from django.urls import path
 
 # PostEditView: Vista de editar los posts
 from .views import (
+
+    # UserSearch: Vista de buscar usuarios
+    UserSearch,
     
     # PostDetailView: Vista de detalle de los posts
-    PostDetailView, 
-    
     # PostEditView: Vista de editar los posts
     # PostDeleteView: Vista de eliminar los posts
     # SharePostView: Vista de compartir los posts
-    PostEditView, PostDeleteView, SharePostView, 
+    PostDetailView,PostEditView, PostDeleteView, SharePostView, 
 
     # AddLike: Vista de agregar likes 
     # AddDislike: Vista de agregar dislikes
@@ -83,4 +84,8 @@ urlpatterns = [
 
     # Declaramos la url de agregar respuestas a los comentarios y le pasamos el pk para poder acceder a los comentarios mediante la url
     path('post/<int:post_pk>/comment/<int:pk>/reply', CommentReplyView.as_view(), name='comment-reply'),
+
+
+    # Declaramos la url de buscar usuarios y le pasamos el pk para poder acceder a los usuarios mediante la url
+    path('search/', UserSearch.as_view(), name='profile-search'),
 ]
