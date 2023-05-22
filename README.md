@@ -57,6 +57,7 @@ python manage.py migrate
 ```
 
 ## Pasos para correr el aplicativo
+- Más información: [Django Tailwind](https://django-tailwind.readthedocs.io/en/latest/installation.html)
 
 ```sh
 # Instalamos tailwind para los estilos
